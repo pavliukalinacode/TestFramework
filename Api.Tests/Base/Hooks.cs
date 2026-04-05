@@ -1,36 +1,63 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Api.Tests.Modules;
+using Reqnroll.BoDi;
+using Configuration.Config;
+using Microsoft.Extensions.Configuration;
 using Reqnroll;
-using System;
-using System.Threading;
+using System.Linq;
+using System.Net.Http;
 
-namespace API.Tests.Base
+namespace Api.Tests.Base
 {
     [Binding]
     public sealed class Hooks
     {
-        private static readonly AsyncLocal<IServiceScope?> Scope = new();
+        private readonly IObjectContainer container;
+        private readonly FeatureContext featureContext;
+        private readonly ScenarioContext scenarioContext;
+
+        public Hooks(
+            IObjectContainer container,
+            FeatureContext featureContext,
+            ScenarioContext scenarioContext)
+        {
+            this.container = container;
+            this.featureContext = featureContext;
+            this.scenarioContext = scenarioContext;
+        }
 
         [BeforeScenario(Order = 0)]
         public void BeforeScenario()
         {
-            Scope.Value = BaseTest.Provider.CreateScope();
+            IConfiguration config = new Configurator().GetConfig();
+
+            var scenarioId = ResolveScenarioId();
+
+            TestCoreModule.Register(container, config, scenarioId);
+
+            var configHelper = container.Resolve<ConfigHelper>();
+
+            PetModule.Register(container, configHelper);
         }
 
         [AfterScenario(Order = 100)]
         public void AfterScenario()
         {
-            Scope.Value?.Dispose();
-            Scope.Value = null;
+            if (container.IsRegistered<HttpClient>())
+            {
+                var httpClient = container.Resolve<HttpClient>();
+                httpClient.Dispose();
+            }
         }
 
-        [AfterTestRun]
-        public static void AfterTestRun()
+        private string ResolveScenarioId()
         {
-            BaseTest.DisposeRootProvider();
-        }
+            if (scenarioContext.ScenarioInfo.Tags.Any())
+                return scenarioContext.ScenarioInfo.Tags[0];
 
-        internal static IServiceProvider Provider =>
-            Scope.Value?.ServiceProvider
-            ?? throw new InvalidOperationException("Scenario scope has not been initialized.");
+            if (featureContext.FeatureInfo.Tags.Any())
+                return featureContext.FeatureInfo.Tags[0];
+
+            return featureContext.FeatureInfo.Title.Replace(" ", "");
+        }
     }
 }
