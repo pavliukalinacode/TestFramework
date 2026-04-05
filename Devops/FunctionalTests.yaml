@@ -1,0 +1,90 @@
+name: Functional Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      cloud:
+        description: "Environment file to generate and load via CLOUD"
+        required: true
+        type: choice
+        options:
+          - Development
+
+      test_suite:
+        description: "Select test suite"
+        required: true
+        type: choice
+        options:
+          - pet-smoke
+          - pet-functional
+
+permissions:
+  contents: read
+
+run-name: FunctionalTests_${{ github.run_number }}_${{ github.run_id }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      CLOUD: ${{ inputs.cloud }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Generate appsettings from template
+        uses: qetza/replacetokens-action@v1.2.1
+        with:
+          sources: |
+            Configuration/appsettings.${{ env.CLOUD }}.template.json => Configuration/appsettings.${{ env.CLOUD }}.json
+          variables: '${{ toJSON(vars) }}'
+          missing-var-action: keep
+          missing-var-log: error
+          if-no-files-found: error
+          no-telemetry: true
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Resolve test filter
+        id: filter
+        run: |
+          if [ "${{ inputs.test_suite }}" = "pet-smoke" ]; then
+            echo "FILTER=TestCategory=pet&TestCategory=smoke" >> $GITHUB_ENV
+            echo "NAME=pet-smoke" >> $GITHUB_ENV
+          elif [ "${{ inputs.test_suite }}" = "pet-functional" ]; then
+            echo "FILTER=TestCategory=pet&TestCategory=functional" >> $GITHUB_ENV
+            echo "NAME=pet-functional" >> $GITHUB_ENV
+          else
+            echo "Unknown test suite"
+            exit 1
+          fi
+
+      - name: Run selected tests
+        run: >
+          dotnet test
+          --configuration Release
+          --no-build
+          --logger "trx;LogFileName=${{ env.NAME }}.trx"
+          --results-directory ./TestResults/${{ env.NAME }}
+          --filter "${{ env.FILTER }}"
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAME }}-${{ inputs.cloud }}
+          path: |
+            TestResults/${{ env.NAME }}/**
+            **/${{ env.NAME }}.trx
+            Configuration/appsettings.${{ env.CLOUD }}.json
