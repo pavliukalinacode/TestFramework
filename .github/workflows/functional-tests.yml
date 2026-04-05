@@ -60,13 +60,14 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Resolve test filter
+        shell: bash
         run: |
           if [ "${{ inputs.test_suite }}" = "pet-smoke" ]; then
-            echo "FILTER=TestCategory=pet&TestCategory=smoke" >> $GITHUB_ENV
-            echo "NAME=pet-smoke" >> $GITHUB_ENV
+            echo "FILTER=TestCategory=pet&TestCategory=smoke" >> "$GITHUB_ENV"
+            echo "NAME=pet-smoke" >> "$GITHUB_ENV"
           elif [ "${{ inputs.test_suite }}" = "pet-functional" ]; then
-            echo "FILTER=TestCategory=pet&TestCategory=functional" >> $GITHUB_ENV
-            echo "NAME=pet-functional" >> $GITHUB_ENV
+            echo "FILTER=TestCategory=pet&TestCategory=functional" >> "$GITHUB_ENV"
+            echo "NAME=pet-functional" >> "$GITHUB_ENV"
           else
             echo "Unknown test suite"
             exit 1
@@ -81,17 +82,40 @@ jobs:
           --results-directory ./TestResults/${{ env.NAME }}
           --filter "${{ env.FILTER }}"
 
-      - name: Upload Reqnroll HTML report
-        id: upload_report
+      - name: Prepare zip report
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifact
+          cp Api.Tests/bin/Release/net9.0/TestResults/reqnroll-report.html artifact/
+          cd artifact
+          zip reqnroll-report.zip reqnroll-report.html
+
+      - name: Upload HTML report (open in browser)
+        id: upload_html
         if: always()
         uses: actions/upload-artifact@v7
         with:
+          name: reqnroll-report-html-${{ env.NAME }}-${{ inputs.cloud }}
           path: Api.Tests/bin/Release/net9.0/TestResults/reqnroll-report.html
           archive: false
 
-      - name: Add report link to summary
+      - name: Upload ZIP report (download)
+        id: upload_zip
         if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reqnroll-report-zip-${{ env.NAME }}-${{ inputs.cloud }}
+          path: artifact/reqnroll-report.zip
+
+      - name: Add report links to summary
+        if: always()
+        shell: bash
         run: |
-          echo "## Reqnroll Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[Open or download the HTML report](${{ steps.upload_report.outputs.artifact-url }})" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Reqnroll Report"
+            echo "### View Report"
+            echo "[Open HTML Report](${{ steps.upload_html.outputs.artifact-url }})"
+            echo "### Download Report"
+            echo "[Download ZIP](${{ steps.upload_zip.outputs.artifact-url }})"
+          } >> "$GITHUB_STEP_SUMMARY"
