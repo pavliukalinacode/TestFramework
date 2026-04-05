@@ -82,19 +82,16 @@ jobs:
           --filter "${{ env.FILTER }}"
 
       - name: Upload Reqnroll HTML report
+        id: upload_report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: reqnroll-report-${{ env.NAME }}-${{ inputs.cloud }}
-          path: |
-            **/TestResults/reqnroll-report.html
-          if-no-files-found: error
+          path: Api.Tests/bin/Release/net9.0/TestResults/reqnroll-report.html
+          archive: false
 
-      - name: Add report info to summary
+      - name: Add report link to summary
         if: always()
         run: |
           echo "## Reqnroll Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The downloadable HTML report is available in the **Artifacts** section of this workflow run." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Artifact name: \`reqnroll-report-${{ env.NAME }}-${{ inputs.cloud }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "[Open or download the HTML report](${{ steps.upload_report.outputs.artifact-url }})" >> $GITHUB_STEP_SUMMARY
