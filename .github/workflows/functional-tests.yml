@@ -81,12 +81,20 @@ jobs:
           --results-directory ./TestResults/${{ env.NAME }}
           --filter "${{ env.FILTER }}"
 
-      - name: Upload test artifacts
+      - name: Upload Reqnroll HTML report
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ env.NAME }}-${{ inputs.cloud }}
+          name: reqnroll-report-${{ env.NAME }}-${{ inputs.cloud }}
           path: |
-            **/TestResults/**/*.trx
             **/TestResults/reqnroll-report.html
-          if-no-files-found: warn
+          if-no-files-found: error
+
+      - name: Add report info to summary
+        if: always()
+        run: |
+          echo "## Reqnroll Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The downloadable HTML report is available in the **Artifacts** section of this workflow run." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Artifact name: \`reqnroll-report-${{ env.NAME }}-${{ inputs.cloud }}\`" >> $GITHUB_STEP_SUMMARY
