@@ -43,7 +43,7 @@ jobs:
         uses: qetza/replacetokens-action@v1.2.1
         with:
           sources: |
-            Configuration/appsettings.${{ env.CLOUD }}.template.json => Configuration/appsettings.${{ env.CLOUD }}.json
+            Configuration/appsettings.${{ env.CLOUD }}.json
           variables: '${{ toJSON(vars) }}'
           missing-var-action: keep
           missing-var-log: error
