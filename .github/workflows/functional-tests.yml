@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       cloud:
-        description: "Environment file to generate and load via CLOUD"
+        description: "Select environment"
         required: true
         type: choice
         options:
@@ -23,6 +23,9 @@ permissions:
 
 run-name: FunctionalTests_${{ github.run_number }}_${{ github.run_id }}
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -32,14 +35,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.0.x
 
-      - name: Generate appsettings from template
+      - name: Replace tokens in appsettings
         uses: qetza/replacetokens-action@v1.2.1
         with:
           sources: |
@@ -57,7 +60,6 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Resolve test filter
-        id: filter
         run: |
           if [ "${{ inputs.test_suite }}" = "pet-smoke" ]; then
             echo "FILTER=TestCategory=pet&TestCategory=smoke" >> $GITHUB_ENV
@@ -81,10 +83,10 @@ jobs:
 
       - name: Upload test artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME }}-${{ inputs.cloud }}
           path: |
-            TestResults/${{ env.NAME }}/**
-            **/${{ env.NAME }}.trx
-            Configuration/appsettings.${{ env.CLOUD }}.json
+            **/TestResults/**/*.trx
+            **/TestResults/reqnroll-report.html
+          if-no-files-found: warn
