@@ -82,31 +82,22 @@ jobs:
           --results-directory ./TestResults/${{ env.NAME }}
           --filter "${{ env.FILTER }}"
 
-      - name: Prepare zip report
-        if: always()
-        shell: bash
-        run: |
-          mkdir -p artifact
-          cp Api.Tests/bin/Release/net9.0/TestResults/reqnroll-report.html artifact/
-          cd artifact
-          zip reqnroll-report.zip reqnroll-report.html
-
-      - name: Upload HTML report (open in browser)
+      - name: Upload HTML report for browser view
         id: upload_html
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: reqnroll-report-html-${{ env.NAME }}-${{ inputs.cloud }}
+          name: reqnroll-report-view-${{ env.NAME }}-${{ inputs.cloud }}
           path: Api.Tests/bin/Release/net9.0/TestResults/reqnroll-report.html
           archive: false
 
-      - name: Upload ZIP report (download)
+      - name: Upload HTML report for zip download
         id: upload_zip
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: reqnroll-report-zip-${{ env.NAME }}-${{ inputs.cloud }}
-          path: artifact/reqnroll-report.zip
+          name: reqnroll-report-download-${{ env.NAME }}-${{ inputs.cloud }}
+          path: Api.Tests/bin/Release/net9.0/TestResults/reqnroll-report.html
 
       - name: Add report links to summary
         if: always()
@@ -114,6 +105,7 @@ jobs:
         run: |
           {
             echo "## Reqnroll Report"
+            echo
             echo "### View Report"
             echo "[Open HTML Report](${{ steps.upload_html.outputs.artifact-url }})"
             echo "### Download Report"
