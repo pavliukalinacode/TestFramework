@@ -1,6 +1,6 @@
 ﻿using Api.Services.Components;
 using Api.Tests.Base;
-using API.Services.Models;
+using Api.Services.Models;
 using Models.PetService.Payload;
 using Models.PetService.Response;
 using Reqnroll;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Tests.Data.PetService.PayloadBuilder;
 using Tests.Tools.Logger;
 
-namespace API.Tests.PetServiceTests.Steps
+namespace Api.Tests.PetServiceTests.Steps
 {
     [Binding]
     public sealed class PetSteps

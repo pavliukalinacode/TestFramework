@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Reqnroll;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
+using System;
 
 namespace Api.Tests.Base
 {
@@ -51,13 +53,38 @@ namespace Api.Tests.Base
 
         private string ResolveScenarioId()
         {
-            if (scenarioContext.ScenarioInfo.Tags.Any())
-                return scenarioContext.ScenarioInfo.Tags[0];
+            var tags = scenarioContext.ScenarioInfo.Tags
+                .Concat(featureContext.FeatureInfo.Tags)
+                .Where(tag => !string.IsNullOrWhiteSpace(tag))
+                .Select(SanitizeTag)
+                .Where(tag => !string.IsNullOrWhiteSpace(tag))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
 
-            if (featureContext.FeatureInfo.Tags.Any())
-                return featureContext.FeatureInfo.Tags[0];
+            if (tags.Length > 0)
+            {
+                return string.Join("_", tags);
+            }
 
-            return featureContext.FeatureInfo.Title.Replace(" ", "");
+            var fallback = $"{featureContext.FeatureInfo.Title}_{scenarioContext.ScenarioInfo.Title}";
+            return SanitizeTag(fallback);
+        }
+
+        private static readonly Regex InvalidCharsRegex = new(@"[^a-zA-Z0-9]+", RegexOptions.Compiled);
+
+        private static readonly Regex CollapseUnderscoreRegex = new(@"_+", RegexOptions.Compiled);
+
+        private static string SanitizeTag(string value)
+        {
+            var sanitized = value.Trim();
+
+            if (sanitized.StartsWith("@"))
+                sanitized = sanitized[1..];
+
+            sanitized = InvalidCharsRegex.Replace(sanitized, "_");
+            sanitized = CollapseUnderscoreRegex.Replace(sanitized, "_");
+
+            return sanitized.Trim('_');
         }
     }
 }

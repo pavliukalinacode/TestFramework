@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace API.Services.Models
+namespace Api.Services.Models
 {
     public class ApiResponse<T>
     {

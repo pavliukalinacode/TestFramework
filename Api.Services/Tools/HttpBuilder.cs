@@ -1,6 +1,8 @@
-﻿using API.Services.Models;
+﻿using Api.Services.Models;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -8,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tests.Tools.Logger;
 
-namespace API.Services.Tools
+namespace Api.Services.Tools
 {
     public sealed class HttpBuilder
     {
@@ -17,6 +19,7 @@ namespace API.Services.Tools
         private readonly ILog logger;
         private TimeSpan? timeout;
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+        private const int MaxLoggedContentLength = 3000;
 
         public HttpBuilder(HttpClient client, ILog logger)
         {
@@ -41,61 +44,11 @@ namespace API.Services.Tools
 
         public HttpBuilder WithTimeout(int timeout)
         {
-            var timeoutSeconds = timeout > 0
+            var timeoutValue = timeout > 0
                 ? TimeSpan.FromSeconds(timeout)
                 : DefaultTimeout;
 
-            return WithTimeout(timeoutSeconds);
-        }
-
-        private async Task<ApiResponse<string>> ExecuteCoreAsync()
-        {
-            using var request = Build();
-            using var cts = new CancellationTokenSource(timeout ?? DefaultTimeout);
-
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            string? content = null;
-            bool isSuccessStatusCode = false;
-            string? errorMessage = null;
-
-            try
-            {
-                logger.Debug($"Request URI: {request.RequestUri}");
-                logger.Debug($"Request Method: {request.Method}");
-
-                using var response = cts is not null
-                    ? await client.SendAsync(request, cts.Token)
-                    : await client.SendAsync(request);
-
-                statusCode = response.StatusCode;
-                isSuccessStatusCode = response.IsSuccessStatusCode;
-                content = await response.Content.ReadAsStringAsync();
-
-                logger.Info($"Response StatusCode: {response.StatusCode}");
-            }
-            catch (TaskCanceledException ex)
-            {
-                errorMessage = timeout.HasValue
-                    ? $"HTTP request timed out after {timeout.Value.TotalSeconds} seconds."
-                    : $"HTTP request was canceled. {ex.Message}";
-
-                logger.Error(errorMessage);
-                statusCode = HttpStatusCode.RequestTimeout;
-            }
-            catch (Exception ex)
-            {
-                errorMessage = $"HTTP exception: {ex.Message}";
-                logger.Error(errorMessage);
-            }
-
-            return new ApiResponse<string>
-            {
-                StatusCode = statusCode,
-                Data = content,
-                Content = content,
-                IsSuccessStatusCode = isSuccessStatusCode,
-                ErrorMessage = errorMessage
-            };
+            return WithTimeout(timeoutValue);
         }
 
         public HttpRequestMessage Build()
@@ -137,7 +90,6 @@ namespace API.Services.Tools
             return this;
         }
 
-        //demonstrating adding parameters despite not using directly in current scenarios to show flexibility of the builder for future use cases
         public HttpBuilder AddParameter(string param, string value)
         {
             configFunction = Compose(configFunction, request =>
@@ -154,7 +106,6 @@ namespace API.Services.Tools
             return this;
         }
 
-        //demonstrating adding headers despite not using directly in current scenarios to show flexibility of the builder for future use cases
         public HttpBuilder AddHeader(string name, string value)
         {
             configFunction = Compose(configFunction, request =>
@@ -177,10 +128,14 @@ namespace API.Services.Tools
                 try
                 {
                     data = JsonConvert.DeserializeObject<T>(rawResponse.Content);
+
+                    logger.Debug(
+                        $"Response deserialized successfully to type '{typeof(T).Name}'.");
                 }
                 catch (JsonException ex)
                 {
-                    logger.Error($"Deserialization exception: {ex.Message}");
+                    logger.Error(ex,
+                        $"Failed to deserialize response to type '{typeof(T).Name}'. Response content: {TrimForLog(rawResponse.Content)}");
                 }
             }
 
@@ -192,6 +147,128 @@ namespace API.Services.Tools
                 IsSuccessStatusCode = rawResponse.IsSuccessStatusCode,
                 ErrorMessage = rawResponse.ErrorMessage
             };
+        }
+
+        private async Task<ApiResponse<string>> ExecuteCoreAsync()
+        {
+            using var request = Build();
+            using var cts = new CancellationTokenSource(timeout ?? DefaultTimeout);
+
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
+            string? content = null;
+            bool isSuccessStatusCode = false;
+            string? errorMessage = null;
+
+            var stopwatch = Stopwatch.StartNew();
+
+            try
+            {
+                await LogRequestAsync(request);
+
+                using var response = await client.SendAsync(request, cts.Token);
+
+                stopwatch.Stop();
+
+                statusCode = response.StatusCode;
+                isSuccessStatusCode = response.IsSuccessStatusCode;
+                content = await response.Content.ReadAsStringAsync();
+
+                LogResponse(response, content, stopwatch.Elapsed);
+            }
+            catch (TaskCanceledException ex)
+            {
+                stopwatch.Stop();
+
+                errorMessage = timeout.HasValue
+                    ? $"HTTP request timed out after {timeout.Value.TotalSeconds} seconds."
+                    : $"HTTP request was canceled. {ex.Message}";
+
+                logger.Error(ex, errorMessage);
+                statusCode = HttpStatusCode.RequestTimeout;
+            }
+            catch (Exception ex)
+            {
+                stopwatch.Stop();
+
+                errorMessage = $"HTTP exception while sending request to '{request.RequestUri}': {ex.Message}";
+                logger.Error(ex, errorMessage);
+            }
+
+            return new ApiResponse<string>
+            {
+                StatusCode = statusCode,
+                Data = content,
+                Content = content,
+                IsSuccessStatusCode = isSuccessStatusCode,
+                ErrorMessage = errorMessage
+            };
+        }
+
+        private async Task LogRequestAsync(HttpRequestMessage request)
+        {
+            logger.Info("Sending HTTP request...");
+            logger.Debug($"Request Method: {request.Method}");
+            logger.Debug($"Request URI: {request.RequestUri}");
+            logger.Debug($"Timeout: {(timeout ?? DefaultTimeout).TotalSeconds} seconds");
+
+            if (request.Headers.Any())
+            {
+                var headers = string.Join("; ",
+                    request.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"));
+
+                logger.Debug($"Request Headers: {headers}");
+            }
+
+            if (request.Content != null)
+            {
+                if (request.Content.Headers.Any())
+                {
+                    var contentHeaders = string.Join("; ",
+                        request.Content.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"));
+
+                    logger.Debug($"Request Content Headers: {contentHeaders}");
+                }
+
+                var body = await request.Content.ReadAsStringAsync();
+                logger.Debug($"Request Body: {TrimForLog(body)}");
+            }
+        }
+
+        private void LogResponse(HttpResponseMessage response, string? content, TimeSpan elapsed)
+        {
+            logger.Info(
+                $"Received HTTP response. StatusCode: {(int)response.StatusCode} ({response.StatusCode}), Duration: {elapsed.TotalMilliseconds:F0} ms");
+
+            if (response.Headers.Any())
+            {
+                var headers = string.Join("; ",
+                    response.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"));
+
+                logger.Debug($"Response Headers: {headers}");
+            }
+
+            if (response.Content?.Headers != null && response.Content.Headers.Any())
+            {
+                var contentHeaders = string.Join("; ",
+                    response.Content.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"));
+
+                logger.Debug($"Response Content Headers: {contentHeaders}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                logger.Debug($"Response Body: {TrimForLog(content)}");
+            }
+        }
+
+        private static string TrimForLog(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            return value.Length <= MaxLoggedContentLength
+                ? value
+                : value[..MaxLoggedContentLength] + "... [truncated]";
         }
     }
 }
