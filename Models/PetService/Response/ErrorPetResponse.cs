@@ -2,7 +2,7 @@
 
 namespace Models.PetService.Response
 {
-    public class ErrorResponse
+    public class ErrorPetResponse
     {
         [JsonProperty("code")]
         public int Code { get; set; }

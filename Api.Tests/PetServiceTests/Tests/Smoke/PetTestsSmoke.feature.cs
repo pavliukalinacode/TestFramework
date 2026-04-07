@@ -18,11 +18,11 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::NUnit.Framework.TestFixtureAttribute()]
-    [global::NUnit.Framework.DescriptionAttribute("Create pet")]
+    [global::NUnit.Framework.DescriptionAttribute("Pet Api Smoke Tests")]
     [global::NUnit.Framework.FixtureLifeCycleAttribute(global::NUnit.Framework.LifeCycle.InstancePerTestCase)]
     [global::NUnit.Framework.CategoryAttribute("pet")]
     [global::NUnit.Framework.CategoryAttribute("smoke")]
-    public partial class CreatePetFeature
+    public partial class PetApiSmokeTestsFeature
     {
         
         private global::Reqnroll.ITestRunner testRunner;
@@ -31,7 +31,8 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
                 "pet",
                 "smoke"};
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "PetServiceTests/Tests/Smoke", "Create pet", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "PetServiceTests/Tests/Smoke", "Pet Api Smoke Tests", "  In order to verify the core pet workflow\r\n  As an API consumer\r\n  I want to cre" +
+                "ate, retrieve, and delete a pet successfully", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
 #line 1 "PetTestsSmoke.feature"
 #line hidden
@@ -113,16 +114,16 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
         }
         
         [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Create pet with available status")]
-        public async global::System.Threading.Tasks.Task CreatePetWithAvailableStatus()
+        [global::NUnit.Framework.DescriptionAttribute("Create retrieve and delete a pet successfully")]
+        public async global::System.Threading.Tasks.Task CreateRetrieveAndDeleteAPetSuccessfully()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "0";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Create pet with available status", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Create retrieve and delete a pet successfully", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 4
+#line 7
   this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -132,20 +133,65 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
             else
             {
                 await this.ScenarioStartAsync();
-#line 5
-    await testRunner.GivenAsync("I have a pet with status \"available\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
+                            "field",
+                            "value"});
+                table1.AddRow(new string[] {
+                            "id",
+                            "5452245"});
+                table1.AddRow(new string[] {
+                            "name",
+                            "Fluffy"});
+                table1.AddRow(new string[] {
+                            "category",
+                            "Cats"});
+                table1.AddRow(new string[] {
+                            "tag",
+                            "Friendly"});
+                table1.AddRow(new string[] {
+                            "tag",
+                            "Domesticated"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/a"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/b"});
+                table1.AddRow(new string[] {
+                            "status",
+                            "available"});
+#line 8
+    await testRunner.GivenAsync("I have a pet with", ((string)(null)), table1, "Given ");
 #line hidden
-#line 6
+#line 18
     await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 7
-    await testRunner.ThenAsync("the create response should be successful", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line 19
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 8
-    await testRunner.AndAsync("the created pet should have status \"available\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 20
+    await testRunner.AndAsync("the created pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 9
-    await testRunner.AndAsync("the created pet should match the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 22
+    await testRunner.WhenAsync("I retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 23
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 24
+    await testRunner.AndAsync("the retrieved pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 26
+    await testRunner.WhenAsync("I delete the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 27
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 29
+    await testRunner.WhenAsync("I try to retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 30
+    await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

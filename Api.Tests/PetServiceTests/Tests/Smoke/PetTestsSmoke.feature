@@ -1,9 +1,30 @@
 ﻿@pet @smoke
-Feature: Create pet
+Feature: Pet Api Smoke Tests
+  In order to verify the core pet workflow
+  As an API consumer
+  I want to create, retrieve, and delete a pet successfully
 
-  Scenario: Create pet with available status
-    Given I have a pet with status "available"
+  Scenario: Create retrieve and delete a pet successfully
+    Given I have a pet with
+      | field    | value                 |
+      | id       | 5452245               |
+      | name     | Fluffy                |
+      | category | Cats                  |
+      | tag      | Friendly              |
+      | tag      | Domesticated          |
+      | photoUrl | https://example.com/a |
+      | photoUrl | https://example.com/b |
+      | status   | available             |
     When I create the pet
-    Then the create response should be successful
-    And the created pet should have status "available"
-    And the created pet should match the submitted payload
+    Then the response status code should be '200'
+    And the created pet matches the submitted payload
+
+    When I retrieve the pet by id
+    Then the response status code should be '200'
+    And the retrieved pet matches the submitted payload
+
+    When I delete the pet by id
+    Then the response status code should be '200'
+
+    When I try to retrieve the pet by id
+    Then the response status code should be '404'

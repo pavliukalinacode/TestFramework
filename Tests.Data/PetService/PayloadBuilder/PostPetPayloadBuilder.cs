@@ -1,52 +1,101 @@
-﻿using Models.PetService.Payload;
+﻿using Models.PetService.General;
+using Models.PetService.Payload;
 using System;
 using System.Collections.Generic;
+using Tests.Data.Attributes;
 
 namespace Tests.Data.PetService.PayloadBuilder
 {
     /// <summary>
-    /// Builder class for dynamically constructing payload for CreatePetRequest
+    /// Builder class for dynamically constructing payload for PostPetPayload
     /// </summary>
     public class PostPetPayloadBuilder
     {
         private long id = GenerateId();
+
+        private Category? category = new()
+        {
+            Id = GenerateId(),
+            Name = "Rabbits"
+        };
+
         private string name = $"qa-pet-{GenerateId()}";
+
         private List<string> photoUrls = ["https://example.com/default.jpg"];
+
+        private List<Tag>? tags =
+        [
+            new Tag
+            {
+                Id = GenerateId(),
+                Name = "Domesticated"
+            }
+        ];
+
         private string status = "available";
 
         private static long GenerateId()
         {
-            return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            return Random.Shared.NextInt64(1, int.MaxValue);
         }
 
-        public PostPetPayloadBuilder SetId(long id)
+        public PostPetPayloadBuilder Apply(string field, string value)
         {
-            this.id = id;
+            return BddFieldApplier.Apply(this, field, value);
+        }
+
+        [BddField("id")]
+        public PostPetPayloadBuilder SetId(string value)
+        {
+            if (!long.TryParse(value, out var parsedId))
+                throw new FormatException($"Invalid id value: '{value}'.");
+
+            id = parsedId;
             return this;
         }
 
-        public PostPetPayloadBuilder SetName(string name)
+        [BddField("name")]
+        public PostPetPayloadBuilder SetName(string? value)
         {
-            this.name = name;
+            name = value!;
             return this;
         }
 
-        public PostPetPayloadBuilder SetPhotoUrls(List<string> photoUrls)
+        [BddField("category")]
+        public PostPetPayloadBuilder SetCategory(string? value)
         {
-            this.photoUrls = photoUrls ?? [];
+            category = new Category
+            {
+                Id = GenerateId()!,
+                Name = value!
+            };
             return this;
         }
 
-        public PostPetPayloadBuilder AddPhotoUrl(string url)
+        [BddField("tag")]
+        public PostPetPayloadBuilder AddTag(string value)
+        {
+            tags ??= [];
+            tags.Add(new Tag
+            {
+                Id = GenerateId(),
+                Name = value
+            });
+            return this;
+        }
+
+        [BddField("status")]
+        public PostPetPayloadBuilder SetStatus(string value)
+        {
+            status = value;
+            return this;
+        }
+
+        [BddField("photoUrl")]
+        public PostPetPayloadBuilder AddPhotoUrl(string value)
         {
             photoUrls ??= [];
-            photoUrls.Add(url);
-            return this;
-        }
-
-        public PostPetPayloadBuilder SetStatus(string status)
-        {
-            this.status = status;
+            photoUrls.Add(value);
             return this;
         }
 
@@ -55,8 +104,10 @@ namespace Tests.Data.PetService.PayloadBuilder
             return new PostPetPayload
             {
                 Id = id,
+                Category = category,
                 Name = name,
                 PhotoUrls = photoUrls,
+                Tags = tags,
                 Status = status
             };
         }

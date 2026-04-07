@@ -28,8 +28,6 @@ namespace Api.Services.Components
 
         public Task<ApiResponse<T>> PostPet<T>(PostPetPayload payload)
         {
-            ArgumentNullException.ThrowIfNull(payload);
-
             return new HttpBuilder(httpClient, logger)
                 .Method(HttpMethod.Post)
                 .ToEndPoint($"/{version}/pet")
@@ -38,15 +36,25 @@ namespace Api.Services.Components
                 .ExecuteAsync<T>();
         }
 
-        public Task<ApiResponse<T>> GetPetById<T>(long petId)
+        public Task<ApiResponse<string>> PostRawPetBody<T>(string rawJson)
         {
             return new HttpBuilder(httpClient, logger)
-                .Method(HttpMethod.Get)
-                .ToEndPoint($"/{version}/pet/{petId}")
-                .ExecuteAsync<T>();
+                .Method(HttpMethod.Post)
+                .ToEndPoint($"/{version}/pet")
+                .AddRawJsonBody(rawJson)
+                .WithTimeout(postPetTimeout)
+                .ExecuteRawAsync();
         }
 
-        public Task<ApiResponse<T>> DeletePet<T>(long petId)
+        public Task<ApiResponse<T>> GetPetById<T>(string petId)
+        {
+            return new HttpBuilder(httpClient, logger)
+                 .Method(HttpMethod.Get)
+                 .ToEndPoint($"/{version}/pet/{petId}")
+                 .ExecuteAsync<T>();
+        }
+
+        public Task<ApiResponse<T>> DeletePetById<T>(string petId)
         {
             return new HttpBuilder(httpClient, logger)
                 .Method(HttpMethod.Delete)

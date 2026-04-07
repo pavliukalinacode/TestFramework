@@ -1,0 +1,114 @@
+{
+  "info": {
+    "_postman_id": "753d1a64-55cd-45bd-92a2-eae9916b53a4",
+    "name": "PetApi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37445126"
+  },
+  "item": [
+    {
+      "name": "POST pet",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const petId = Math.floor(Math.random() * 1000000000);\r",
+              "pm.environment.set(\"petId\", petId);\r",
+              "\r",
+              "const tagId = Math.floor(Math.random() * 1000000000);\r",
+              "pm.environment.set(\"tagId\", tagId);\r",
+              "\r",
+              "const categoryId = Math.floor(Math.random() * 1000000000);\r",
+              "pm.environment.set(\"categoryId\", categoryId);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "api_key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": {{categoryId}},\r\n    \"name\": \"Rabbits\"\r\n  },\r\n  \"name\": \"Angora Silver Robin\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": {{tagId}},\r\n      \"name\": \"Domesticated\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/pet",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pet"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET pet",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "api_key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/pet/{{petId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pet",
+            "{{petId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE pet",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pet/{{petId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pet",
+            "{{petId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

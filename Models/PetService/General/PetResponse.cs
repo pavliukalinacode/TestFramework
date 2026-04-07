@@ -8,6 +8,9 @@ namespace Models.PetService.General
         [JsonProperty("id")]
         public long Id { get; set; }
 
+        [JsonProperty("category")]
+        public Category? Category { get; set; }
+
         [JsonProperty("name")]
         public string? Name { get; set; }
 

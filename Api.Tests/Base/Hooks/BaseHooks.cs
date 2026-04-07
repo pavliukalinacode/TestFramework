@@ -1,23 +1,25 @@
 ﻿using Api.Tests.Modules;
-using Reqnroll.BoDi;
 using Configuration.Config;
 using Microsoft.Extensions.Configuration;
 using Reqnroll;
+using Reqnroll.BoDi;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System;
 
-namespace Api.Tests.Base
+namespace Api.Tests.Base.Hooks
 {
     [Binding]
-    public sealed class Hooks
+    public sealed class BaseHooks
     {
         private readonly IObjectContainer container;
         private readonly FeatureContext featureContext;
         private readonly ScenarioContext scenarioContext;
 
-        public Hooks(
+        private static readonly Regex Sanitizer = new(@"[^a-zA-Z0-9]+", RegexOptions.Compiled);
+
+        public BaseHooks(
             IObjectContainer container,
             FeatureContext featureContext,
             ScenarioContext scenarioContext)
@@ -70,21 +72,11 @@ namespace Api.Tests.Base
             return SanitizeTag(fallback);
         }
 
-        private static readonly Regex InvalidCharsRegex = new(@"[^a-zA-Z0-9]+", RegexOptions.Compiled);
-
-        private static readonly Regex CollapseUnderscoreRegex = new(@"_+", RegexOptions.Compiled);
-
         private static string SanitizeTag(string value)
         {
-            var sanitized = value.Trim();
-
-            if (sanitized.StartsWith("@"))
-                sanitized = sanitized[1..];
-
-            sanitized = InvalidCharsRegex.Replace(sanitized, "_");
-            sanitized = CollapseUnderscoreRegex.Replace(sanitized, "_");
-
-            return sanitized.Trim('_');
+            return Sanitizer
+                .Replace(value.Trim().TrimStart('@'), "_")
+                .Trim('_');
         }
     }
 }

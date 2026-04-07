@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tests.Tools.Logger;
+using System.Net.Mime;
 
 namespace Api.Services.Tools
 {
@@ -83,7 +84,18 @@ namespace Api.Services.Tools
             configFunction = Compose(configFunction, request =>
             {
                 var json = JsonConvert.SerializeObject(contractObject);
-                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                request.Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+                return request;
+            });
+
+            return this;
+        }
+
+        public HttpBuilder AddRawJsonBody(string rawJson)
+        {
+            configFunction = Compose(configFunction, request =>
+            {
+                request.Content = new StringContent(rawJson, Encoding.UTF8, MediaTypeNames.Application.Json);
                 return request;
             });
 
@@ -147,6 +159,11 @@ namespace Api.Services.Tools
                 IsSuccessStatusCode = rawResponse.IsSuccessStatusCode,
                 ErrorMessage = rawResponse.ErrorMessage
             };
+        }
+
+        public Task<ApiResponse<string>> ExecuteRawAsync()
+        {
+            return ExecuteCoreAsync();
         }
 
         private async Task<ApiResponse<string>> ExecuteCoreAsync()
