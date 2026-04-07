@@ -71,7 +71,8 @@ The framework currently includes:
 
 **1 Smoke test**
 **16 Functional tests**
-Breakdown
+<img width="1135" height="645" alt="image" src="https://github.com/user-attachments/assets/2f3259bb-3749-48d9-a901-2060de278d14" />
+
 Positive scenarios: validate expected behavior (create, retrieve, valid inputs)
 Negative scenarios: validate invalid inputs and error handling
 
