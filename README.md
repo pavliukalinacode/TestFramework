@@ -88,6 +88,28 @@ Bugs are explicitly described in scenario comments
 Tests are written to reflect actual current behavior
 Expected correct behavior is documented but quarantined
 
+## Logging
+
+The framework provides two logging modes depending on the execution environment.
+
+### CI Execution (Safe Logging)
+
+For CI/CD runs, a **safe logger** is used.
+It prevents exposure of sensitive or excessive data
+
+### Configuration
+
+The logger type is controlled via `appsettings`.
+
+- Default configuration in CI uses the **safe logger**
+- This is enforced via GitHub Variables
+- Local runs can override this to use the console logger
+
+### Example (Local Debug Output)
+
+Below is an example of verbose console logging during local execution:
+<img width="2213" height="1229" alt="image" src="https://github.com/user-attachments/assets/d50859d6-d57b-45ab-89da-854dab2d9bd4" />
+
 ## Notes on Task Completion
 
 ### AI Usage
