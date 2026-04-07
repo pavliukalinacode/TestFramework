@@ -82,8 +82,7 @@ Negative tests are intentionally implemented as **bug scenarios**
 Reason:
 The API under test (Swagger Petstore) is a demo service. It contains multiple inconsistencies and validation gaps. These behaviors are documented and treated as defects.
 Approach:
-Bugs are explicitly described in scenario comments. Tests are written to reflect actual current behavior. Expected correct behavior is documented but quarantined.
-
+Bugs are explicitly described in scenario comments. Tests are written to reflect actual current behavior. Expected correct behavior is documented but quarantined. During manual testing, even more inconsistencies were discovered, which in a real-world scenario would require extensive clarification and confirmation + documenting of requirements with the Business Analyst.
 ## Logging
 
 The framework provides two logging modes depending on the execution environment.
