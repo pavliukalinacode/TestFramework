@@ -64,6 +64,7 @@ Output location:
 /bin/<configuration>/TestResults
 A sample report is included in:
 /Reports
+<img width="868" height="1314" alt="image" src="https://github.com/user-attachments/assets/38825e4d-bc2c-4daa-be8f-5315992e1c7b" />
 
 ## Test Coverage
 
