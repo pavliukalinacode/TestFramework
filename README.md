@@ -54,6 +54,8 @@ Configuration is managed via `appsettings` and environment-based overrides.
 - During pipeline execution, these values are injected into the test runtime
 - Pipeline Execution happens using **Github Actions** and is built in, but without **writing access** you wont be able to trigget the pipeline. Pipeline file is stored in .github/workflows/functional-tests.yml
 - The framework automatically resolves configuration based on environment
+<img width="1614" height="1167" alt="image" src="https://github.com/user-attachments/assets/72c89b34-94f2-478f-bdba-815d5361b11e" />
+
 
 BDD Reporting
 BDD test reports are generated automatically during execution
