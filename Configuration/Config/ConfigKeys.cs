@@ -1,5 +1,9 @@
 ﻿namespace Configuration.Config
 {
+    /// <summary>
+    /// Defines constant keys used for accessing configuration values.
+    /// Centralizes configuration key management.
+    /// </summary>
     public static class ConfigKeys
     {
         // Common

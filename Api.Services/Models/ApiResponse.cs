@@ -2,6 +2,10 @@
 
 namespace Api.Services.Models
 {
+    /// <summary>
+    /// Represents a generic API response.
+    /// Contains status code, deserialized data, raw response content, and success indicator.
+    /// </summary
     public class ApiResponse<T>
     {
         public HttpStatusCode StatusCode { get; set; }

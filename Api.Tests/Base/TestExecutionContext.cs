@@ -3,6 +3,10 @@ using System;
 
 namespace Api.Tests.Base
 {
+    /// <summary>
+    /// Represents the execution context of a test scenario.
+    /// Stores metadata such as scenario identifier and runtime-related information.
+    /// </summary>
     public sealed class TestExecutionContext
     {
         public IConfiguration Config { get; }

@@ -5,14 +5,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tests.Tools.Logger;
-using System.Net.Mime;
 
 namespace Api.Services.Tools
 {
+    /// <summary>
+    /// Fluent builder for constructing HTTP requests.
+    /// Supports setting method, endpoint, headers, body, query parameters, and timeout.
+    /// Handles execution and response deserialization.
+    /// </summary>
     public sealed class HttpBuilder
     {
         private Func<HttpRequestMessage, HttpRequestMessage> configFunction;

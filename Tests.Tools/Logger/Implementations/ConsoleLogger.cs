@@ -4,8 +4,8 @@ using Tests.Tools.Logger.Enums;
 namespace Tests.Tools.Logger.Implementations
 {
     /// <summary>
-    /// Logger used for local execution.
-    /// Writes all log messages to the console.
+    /// Logger implementation that writes messages to the console.
+    /// Used primarily for local debugging and test execution.
     /// </summary>
     internal class ConsoleLogger : ILog
     {

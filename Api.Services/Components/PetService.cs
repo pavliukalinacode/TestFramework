@@ -9,6 +9,10 @@ using Tests.Tools.Logger;
 
 namespace Api.Services.Components
 {
+    /// <summary>
+    /// Provides operations for interacting with the Pet API.
+    /// Supports creating, retrieving, and deleting pet entities.
+    /// </summary>
     public class PetService
     {
         private readonly HttpClient httpClient;

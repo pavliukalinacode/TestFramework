@@ -4,6 +4,10 @@ using System.IO;
 
 namespace Configuration.Config
 {
+    /// <summary>
+    /// Responsible for loading and initializing configuration.
+    /// Supports environment-based configuration files.
+    /// </summary>
     public class Configurator
     {
         private const string DefaultSettingsFilename = "appsettings";

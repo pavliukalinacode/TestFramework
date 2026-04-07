@@ -7,7 +7,8 @@ using Tests.Data.Attributes;
 namespace Tests.Data.PetService.PayloadBuilder
 {
     /// <summary>
-    /// Builder class for dynamically constructing payload for PostPetPayload
+    /// Builder for constructing PostPetPayload instances.
+    /// Provides a flexible way to create valid and invalid test data.
     /// </summary>
     public class PostPetPayloadBuilder
     {

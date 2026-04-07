@@ -3,6 +3,10 @@ using System;
 
 namespace Configuration.Config
 {
+    /// <summary>
+    /// Provides helper methods for accessing configuration values.
+    /// Enables strongly-typed retrieval of settings.
+    /// </summary>
     public class ConfigHelper(IConfiguration config)
     {
         private readonly IConfiguration config = config ?? throw new ArgumentNullException(nameof(config));

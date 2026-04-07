@@ -6,6 +6,10 @@ using Tests.Tools.Logger;
 
 namespace Api.Tests.Modules
 {
+    /// <summary>
+    /// Registers core framework dependencies.
+    /// Includes configuration, logging, and shared services required for test execution.
+    /// </summary>
     public static class TestCoreModule
     {
         public static void Register(IObjectContainer container, IConfiguration config, string scenarioId)

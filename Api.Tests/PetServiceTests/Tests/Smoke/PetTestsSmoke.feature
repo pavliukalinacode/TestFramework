@@ -7,7 +7,6 @@ Feature: Pet Api Smoke Tests
   Scenario: Create retrieve and delete a pet successfully
     Given I have a pet with
       | field    | value                 |
-      | id       | 5452245               |
       | name     | Fluffy                |
       | category | Cats                  |
       | tag      | Friendly              |

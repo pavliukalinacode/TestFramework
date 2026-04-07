@@ -18,11 +18,11 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::NUnit.Framework.TestFixtureAttribute()]
-    [global::NUnit.Framework.DescriptionAttribute("Pet Api Feature Tests")]
+    [global::NUnit.Framework.DescriptionAttribute("Pet API Functional Validation")]
     [global::NUnit.Framework.FixtureLifeCycleAttribute(global::NUnit.Framework.LifeCycle.InstancePerTestCase)]
     [global::NUnit.Framework.CategoryAttribute("pet")]
     [global::NUnit.Framework.CategoryAttribute("functional")]
-    public partial class PetApiFeatureTestsFeature
+    public partial class PetAPIFunctionalValidationFeature
     {
         
         private global::Reqnroll.ITestRunner testRunner;
@@ -31,8 +31,11 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
                 "pet",
                 "functional"};
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "PetServiceTests/Tests/Functional", "Pet Api Feature Tests", "  In order to prevent known defects from reappearing\r\n  As an API consumer\r\n  I w" +
-                "ant invalid and inconsistent pet API behavior to be rejected correctly", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "PetServiceTests/Tests/Functional", "Pet API Functional Validation", @"  In order to ensure the Pet API behaves reliably under valid and invalid conditions
+  As an API consumer
+  I want requests to be correctly validated, processed, and rejected when necessary
+
+  So that data integrity is preserved and previously identified defects do not reoccur", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
 #line 1 "PetTests.feature"
 #line hidden
@@ -110,392 +113,22 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("PetServiceTests/Tests/Functional/PetTests.feature.ndjson", 13);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("PetServiceTests/Tests/Functional/PetTests.feature.ndjson", 18);
         }
         
         [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with string id should be rejected without server error")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("string_pet_id_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithStringIdShouldBeRejectedWithoutServerError()
+        [global::NUnit.Framework.DescriptionAttribute("Create and retrieve a pet with special characters in fields")]
+        [global::NUnit.Framework.CategoryAttribute("positive")]
+        public async global::System.Threading.Tasks.Task CreateAndRetrieveAPetWithSpecialCharactersInFields()
         {
             string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "string_pet_id_validation"};
+                    "positive"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "0";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with string id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Create and retrieve a pet with special characters in fields", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 15
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 16
-    await testRunner.GivenAsync("I have the pet with invalid string-type Id", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 17
-    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 18
-    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with an out of range numeric id should be rejected without server " +
-            "error")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("oversized_pet_id_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithAnOutOfRangeNumericIdShouldBeRejectedWithoutServerError()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "oversized_pet_id_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "1";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with an out of range numeric id should be rejected without server " +
-                    "error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 29
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 30
-    await testRunner.GivenAsync("I have a pet with an id longer than long", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 31
-    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 32
-    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with string category id should be rejected without server error")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("string_category_id_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithStringCategoryIdShouldBeRejectedWithoutServerError()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "string_category_id_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "2";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with string category id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 43
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 44
-    await testRunner.GivenAsync("I have the pet with invalid string-type category Id", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 45
-    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 46
-    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with out of range category id should be rejected without server er" +
-            "ror")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("oversized_category_id_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithOutOfRangeCategoryIdShouldBeRejectedWithoutServerError()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "oversized_category_id_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "3";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with out of range category id should be rejected without server er" +
-                    "ror", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 57
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 58
-    await testRunner.GivenAsync("I have the pet with category Id longer than long", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 59
-    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 60
-    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with string tag id should be rejected without server error")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("string_tag_id_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithStringTagIdShouldBeRejectedWithoutServerError()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "string_tag_id_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "4";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with string tag id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 71
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 72
-    await testRunner.GivenAsync("I have the pet with invalid string-type tag Id", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 73
-    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 74
-    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with out of range tag id should be rejected without server error")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("oversized_tag_id_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithOutOfRangeTagIdShouldBeRejectedWithoutServerError()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "oversized_tag_id_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "5";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with out of range tag id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 85
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 86
-    await testRunner.GivenAsync("I have the pet with tag Id longer than long", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 87
-    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 88
-    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Retrieving a pet with a non numeric id should not leak implementation details")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("get_invalid_raw_id_exception_leak")]
-        public async global::System.Threading.Tasks.Task RetrievingAPetWithANonNumericIdShouldNotLeakImplementationDetails()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "get_invalid_raw_id_exception_leak"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "6";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Retrieving a pet with a non numeric id should not leak implementation details", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 98
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 99
-    await testRunner.WhenAsync("I try to retrieve the pet by id \'*\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 100
-    await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Deleting a pet with a non numeric id should not leak implementation details")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("delete_invalid_raw_id_exception_leak")]
-        public async global::System.Threading.Tasks.Task DeletingAPetWithANonNumericIdShouldNotLeakImplementationDetails()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "delete_invalid_raw_id_exception_leak"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "7";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Deleting a pet with a non numeric id should not leak implementation details", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 110
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 111
-    await testRunner.WhenAsync("I delete the pet by id \'fluff\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 112
-    await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet without name should be rejected")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("missing_name_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithoutNameShouldBeRejected()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "missing_name_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "8";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet without name should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 123
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 124
-    await testRunner.GivenAsync("I have a pet with no name", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 125
-    await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 126
-    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet without category should be rejected")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("missing_category_validation")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithoutCategoryShouldBeRejected()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "missing_category_validation"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "9";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet without category should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 137
-  this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 138
-    await testRunner.GivenAsync("I have a pet with no category", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 139
-    await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 140
-    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::NUnit.Framework.TestAttribute()]
-        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with duplicate id should be rejected")]
-        [global::NUnit.Framework.CategoryAttribute("bug")]
-        [global::NUnit.Framework.CategoryAttribute("duplicate_id_handling")]
-        public async global::System.Threading.Tasks.Task CreatingAPetWithDuplicateIdShouldBeRejected()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "bug",
-                    "duplicate_id_handling"};
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "10";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with duplicate id should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 152
+#line 12
   this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -509,39 +142,98 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
                             "field",
                             "value"});
                 table1.AddRow(new string[] {
-                            "id",
-                            "5452245"});
-                table1.AddRow(new string[] {
                             "name",
-                            "Fluffy"});
+                            "Mr. Whiskers #1 / Café"});
                 table1.AddRow(new string[] {
                             "category",
-                            "Cats"});
+                            "Cats & Pets"});
                 table1.AddRow(new string[] {
                             "tag",
-                            "Friendly"});
+                            "indoor-friendly"});
                 table1.AddRow(new string[] {
-                            "photoUrl",
-                            "https://example.com/a"});
+                            "tag",
+                            "zażółć-jaźń"});
+                table1.AddRow(new string[] {
+                            "tag",
+                            "pet !@#$%^&*()"});
                 table1.AddRow(new string[] {
                             "status",
-                            "sold"});
-#line 153
+                            "available"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/cat%20photo.jpg"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/cats?name=Fluffy&age=2"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/#fluffy"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/image.jpg?size=large"});
+                table1.AddRow(new string[] {
+                            "photoUrl",
+                            "https://sub.domain.example.com/pet"});
+#line 13
     await testRunner.GivenAsync("I have a pet with", ((string)(null)), table1, "Given ");
 #line hidden
-#line 161
-    await testRunner.AndAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 26
+    await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 162
-    await testRunner.AndAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 27
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
+#line 28
+    await testRunner.AndAsync("the created pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 29
+    await testRunner.WhenAsync("I retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 30
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 31
+    await testRunner.AndAsync("the retrieved pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Create and retrieve a pet with supported status")]
+        [global::NUnit.Framework.CategoryAttribute("positive")]
+        [global::NUnit.Framework.TestCaseAttribute("available", "1", null)]
+        [global::NUnit.Framework.TestCaseAttribute("pending", "2", null)]
+        [global::NUnit.Framework.TestCaseAttribute("sold", "3", null)]
+        public async global::System.Threading.Tasks.Task CreateAndRetrieveAPetWithSupportedStatus(string status, string @__pickleIndex, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "positive"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("status", status);
+            string pickleIndex = @__pickleIndex;
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Create and retrieve a pet with supported status", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 35
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
                 global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
                             "field",
                             "value"});
                 table2.AddRow(new string[] {
-                            "id",
-                            "5452245"});
-                table2.AddRow(new string[] {
                             "name",
                             "Fluffy"});
                 table2.AddRow(new string[] {
@@ -551,18 +243,565 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
                             "tag",
                             "Friendly"});
                 table2.AddRow(new string[] {
-                            "photoUrl",
-                            "https://example.com/a"});
-                table2.AddRow(new string[] {
                             "status",
-                            "sold"});
-#line 164
-    await testRunner.AndAsync("I have a pet with", ((string)(null)), table2, "And ");
+                            string.Format("{0}", status)});
+#line 36
+    await testRunner.GivenAsync("I have a pet with", ((string)(null)), table2, "Given ");
 #line hidden
-#line 172
+#line 42
     await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 173
+#line 43
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 44
+    await testRunner.WhenAsync("I retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 45
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 46
+    await testRunner.AndAsync("the retrieved pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with string id should be rejected without server error")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("string_pet_id_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithStringIdShouldBeRejectedWithoutServerError()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "string_pet_id_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "4";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with string id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 63
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 64
+    await testRunner.GivenAsync("I have the pet with invalid string-type Id", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 65
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 66
+    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with an out of range numeric id should be rejected without server " +
+            "error")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("oversized_pet_id_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithAnOutOfRangeNumericIdShouldBeRejectedWithoutServerError()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "oversized_pet_id_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "5";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with an out of range numeric id should be rejected without server " +
+                    "error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 78
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 79
+    await testRunner.GivenAsync("I have a pet with an id longer than long", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 80
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 81
+    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with string category id should be rejected without server error")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("string_category_id_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithStringCategoryIdShouldBeRejectedWithoutServerError()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "string_category_id_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "6";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with string category id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 93
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 94
+    await testRunner.GivenAsync("I have the pet with invalid string-type category Id", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 95
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 96
+    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with out of range category id should be rejected without server er" +
+            "ror")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("oversized_category_id_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithOutOfRangeCategoryIdShouldBeRejectedWithoutServerError()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "oversized_category_id_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "7";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with out of range category id should be rejected without server er" +
+                    "ror", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 108
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 109
+    await testRunner.GivenAsync("I have the pet with category Id longer than long", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 110
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 111
+    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with string tag id should be rejected without server error")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("string_tag_id_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithStringTagIdShouldBeRejectedWithoutServerError()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "string_tag_id_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "8";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with string tag id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 123
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 124
+    await testRunner.GivenAsync("I have the pet with invalid string-type tag Id", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 125
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 126
+    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with out of range tag id should be rejected without server error")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("oversized_tag_id_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithOutOfRangeTagIdShouldBeRejectedWithoutServerError()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "oversized_tag_id_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "9";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with out of range tag id should be rejected without server error", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 138
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 139
+    await testRunner.GivenAsync("I have the pet with tag Id longer than long", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 140
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 141
+    await testRunner.ThenAsync("the response status code should be \'500\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Retrieving a pet with a non numeric id should not leak implementation details")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("get_invalid_raw_id_exception_leak_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task RetrievingAPetWithANonNumericIdShouldNotLeakImplementationDetails()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "get_invalid_raw_id_exception_leak_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "10";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Retrieving a pet with a non numeric id should not leak implementation details", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 152
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 153
+    await testRunner.WhenAsync("I try to retrieve the pet by id \'*\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 154
+    await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Deleting a pet with a non numeric id should not leak implementation details")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("delete_invalid_raw_id_exception_leak_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task DeletingAPetWithANonNumericIdShouldNotLeakImplementationDetails()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "delete_invalid_raw_id_exception_leak_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "11";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Deleting a pet with a non numeric id should not leak implementation details", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 165
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 166
+    await testRunner.WhenAsync("I delete the pet by id \'fluff\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 167
+    await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet without name should be rejected")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("missing_name_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithoutNameShouldBeRejected()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "missing_name_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "12";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet without name should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 179
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 180
+    await testRunner.GivenAsync("I have a pet with no name", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 181
+    await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 182
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet without category should be rejected")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("missing_category_validation_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithoutCategoryShouldBeRejected()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "missing_category_validation_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "13";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet without category should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 194
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 195
+    await testRunner.GivenAsync("I have a pet with no category", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 196
+    await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 197
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with duplicate id should be rejected")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("duplicate_id_handling_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithDuplicateIdShouldBeRejected()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "duplicate_id_handling_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "14";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with duplicate id should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 210
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+                global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
+                            "field",
+                            "value"});
+                table3.AddRow(new string[] {
+                            "id",
+                            "5452245"});
+                table3.AddRow(new string[] {
+                            "name",
+                            "Fluffy"});
+                table3.AddRow(new string[] {
+                            "category",
+                            "Cats"});
+                table3.AddRow(new string[] {
+                            "tag",
+                            "Friendly"});
+                table3.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/a"});
+                table3.AddRow(new string[] {
+                            "status",
+                            "sold"});
+#line 211
+    await testRunner.GivenAsync("I have a pet with", ((string)(null)), table3, "Given ");
+#line hidden
+#line 219
+    await testRunner.AndAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 220
+    await testRunner.AndAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+                global::Reqnroll.Table table4 = new global::Reqnroll.Table(new string[] {
+                            "field",
+                            "value"});
+                table4.AddRow(new string[] {
+                            "id",
+                            "5452245"});
+                table4.AddRow(new string[] {
+                            "name",
+                            "Fluffy"});
+                table4.AddRow(new string[] {
+                            "category",
+                            "Cats"});
+                table4.AddRow(new string[] {
+                            "tag",
+                            "Friendly"});
+                table4.AddRow(new string[] {
+                            "photoUrl",
+                            "https://example.com/a"});
+                table4.AddRow(new string[] {
+                            "status",
+                            "sold"});
+#line 221
+    await testRunner.AndAsync("I have a pet with", ((string)(null)), table4, "And ");
+#line hidden
+#line 229
+    await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 230
+    await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::NUnit.Framework.TestAttribute()]
+        [global::NUnit.Framework.DescriptionAttribute("Creating a pet with empty json payload should be rejected")]
+        [global::NUnit.Framework.CategoryAttribute("bug")]
+        [global::NUnit.Framework.CategoryAttribute("negative")]
+        [global::NUnit.Framework.CategoryAttribute("default_id_for_empty_payload_bug_id")]
+        [global::NUnit.Framework.CategoryAttribute("should_fail")]
+        public async global::System.Threading.Tasks.Task CreatingAPetWithEmptyJsonPayloadShouldBeRejected()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "bug",
+                    "negative",
+                    "default_id_for_empty_payload_bug_id",
+                    "should_fail"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "15";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Creating a pet with empty json payload should be rejected", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 243
+  this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 244
+    await testRunner.GivenAsync("I have the pet payload as raw json \"{}\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 245
+    await testRunner.WhenAsync("I create the pet with invalid data", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 246
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

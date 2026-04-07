@@ -57,6 +57,12 @@ namespace Api.Tests.PetServiceTests.Steps
                     .Build());
         }
 
+        [Given(@"I have the pet payload as raw json ""(.*)""")]
+        public void GivenIHaveThePetPayloadAsRawJson(string json)
+        {
+            scenarioContext.Set(json);
+        }
+
         [Given(@"I have the pet with invalid string-type Id")]
         public void GivenIHaveThePetWithInvalidStringTypeId()
         {
