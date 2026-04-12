@@ -1,8 +1,7 @@
 ﻿using Api.Services.Components;
 using Configuration.Config;
-using Reqnroll.BoDi;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Net.Http;
 
 namespace Api.Tests.Modules
 {
@@ -12,20 +11,24 @@ namespace Api.Tests.Modules
     /// </summary>
     public static class PetModule
     {
-        public static void Register(IObjectContainer container, ConfigHelper configHelper)
+        public static IServiceCollection AddPetModule(this IServiceCollection services)
         {
-            var baseUrl = configHelper.GetRequiredString(
-                ConfigKeys.ScenariosSection,
-                ConfigKeys.PetTests,
-                ConfigKeys.BaseUrl);
+            ArgumentNullException.ThrowIfNull(services);
 
-            var httpClient = new HttpClient
+            services.AddHttpClient<PetService>((sp, client) =>
             {
-                BaseAddress = new Uri(baseUrl)
-            };
+                var helper = sp.GetRequiredService<ConfigHelper>();
 
-            container.RegisterInstanceAs(httpClient);
-            container.RegisterTypeAs<PetService, PetService>();
+                var baseUrl = helper.GetRequiredString(
+                    ConfigKeys.ScenariosSection,
+                    ConfigKeys.PetTests,
+                    ConfigKeys.BaseUrl);
+
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(90);
+            });
+
+            return services;
         }
     }
 }

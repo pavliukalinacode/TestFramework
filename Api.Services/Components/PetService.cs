@@ -55,7 +55,10 @@ namespace Api.Services.Components
             return new HttpBuilder(httpClient, logger)
                  .Method(HttpMethod.Get)
                  .ToEndPoint($"/{version}/pet/{petId}")
-                 .ExecuteAsync<T>();
+                 .ExecuteWithRetryAsync<T>(
+                     shouldRetry: response => (int)response.StatusCode == 404,
+                     maxAttempts: 10,
+                     delayMilliseconds: 5000);
         }
 
         public Task<ApiResponse<T>> DeletePetById<T>(string petId)
@@ -63,7 +66,10 @@ namespace Api.Services.Components
             return new HttpBuilder(httpClient, logger)
                 .Method(HttpMethod.Delete)
                 .ToEndPoint($"/{version}/pet/{petId}")
-                .ExecuteAsync<T>();
+                .ExecuteWithRetryAsync<T>(
+                    shouldRetry: response => (int)response.StatusCode == 404,
+                    maxAttempts: 10,
+                    delayMilliseconds: 5000);
         }
     }
 }

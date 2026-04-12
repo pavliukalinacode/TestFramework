@@ -24,7 +24,6 @@ namespace Api.Services.Tools
         private readonly HttpClient client;
         private readonly ILog logger;
         private TimeSpan? timeout;
-        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
         private const int MaxLoggedContentLength = 3000;
 
         public HttpBuilder(HttpClient client, ILog logger)
@@ -43,7 +42,7 @@ namespace Api.Services.Tools
         {
             this.timeout = (timeout.HasValue && timeout.Value > TimeSpan.Zero)
                 ? timeout.Value
-                : DefaultTimeout;
+                : null;
 
             return this;
         }
@@ -52,7 +51,7 @@ namespace Api.Services.Tools
         {
             var timeoutValue = timeout > 0
                 ? TimeSpan.FromSeconds(timeout)
-                : DefaultTimeout;
+                : (TimeSpan?)null;
 
             return WithTimeout(timeoutValue);
         }
@@ -138,32 +137,46 @@ namespace Api.Services.Tools
         {
             var rawResponse = await ExecuteCoreAsync();
 
-            T? data = default;
+            return DeserializeResponse<T>(rawResponse);
+        }
 
-            if (!string.IsNullOrWhiteSpace(rawResponse.Content))
+        public async Task<ApiResponse<T>> ExecuteWithRetryAsync<T>(
+            Func<ApiResponse<T>, bool> shouldRetry,
+            int maxAttempts = 5,
+            int delayMilliseconds = 1000)
+        {
+            ArgumentNullException.ThrowIfNull(shouldRetry);
+
+            if (maxAttempts <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maxAttempts), "Max attempts must be greater than zero.");
+
+            if (delayMilliseconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(delayMilliseconds), "Delay must be zero or greater.");
+
+            ApiResponse<T>? lastResponse = null;
+
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
             {
-                try
-                {
-                    data = JsonConvert.DeserializeObject<T>(rawResponse.Content);
+                var rawResponse = await ExecuteCoreAsync();
+                lastResponse = DeserializeResponse<T>(rawResponse);
 
-                    logger.Debug(
-                        $"Response deserialized successfully to type '{typeof(T).Name}'.");
-                }
-                catch (JsonException ex)
+                if (!shouldRetry(lastResponse))
                 {
-                    logger.Error(ex,
-                        $"Failed to deserialize response to type '{typeof(T).Name}'. Response content: {TrimForLog(rawResponse.Content)}");
+                    return lastResponse;
+                }
+
+                if (attempt < maxAttempts)
+                {
+                    logger.Info(
+                        $"Retrying HTTP request. Attempt {attempt}/{maxAttempts}. " +
+                        $"StatusCode: {(int)lastResponse.StatusCode} ({lastResponse.StatusCode}). " +
+                        $"Waiting {delayMilliseconds} ms before next attempt.");
+
+                    await Task.Delay(delayMilliseconds);
                 }
             }
 
-            return new ApiResponse<T>
-            {
-                StatusCode = rawResponse.StatusCode,
-                Data = data,
-                Content = rawResponse.Content,
-                IsSuccessStatusCode = rawResponse.IsSuccessStatusCode,
-                ErrorMessage = rawResponse.ErrorMessage
-            };
+            return lastResponse!;
         }
 
         public Task<ApiResponse<string>> ExecuteRawAsync()
@@ -174,7 +187,6 @@ namespace Api.Services.Tools
         private async Task<ApiResponse<string>> ExecuteCoreAsync()
         {
             using var request = Build();
-            using var cts = new CancellationTokenSource(timeout ?? DefaultTimeout);
 
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             string? content = null;
@@ -187,7 +199,13 @@ namespace Api.Services.Tools
             {
                 await LogRequestAsync(request);
 
-                using var response = await client.SendAsync(request, cts.Token);
+                using var cts = timeout.HasValue
+                    ? new CancellationTokenSource(timeout.Value)
+                    : null;
+
+                using var response = cts is not null
+                    ? await client.SendAsync(request, cts.Token)
+                    : await client.SendAsync(request);
 
                 stopwatch.Stop();
 
@@ -226,12 +244,46 @@ namespace Api.Services.Tools
             };
         }
 
+        private ApiResponse<T> DeserializeResponse<T>(ApiResponse<string> rawResponse)
+        {
+            T? data = default;
+
+            if (!string.IsNullOrWhiteSpace(rawResponse.Content))
+            {
+                try
+                {
+                    data = JsonConvert.DeserializeObject<T>(rawResponse.Content);
+
+                    logger.Debug(
+                        $"Response deserialized successfully to type '{typeof(T).Name}'.");
+                }
+                catch (JsonException ex)
+                {
+                    logger.Error(ex,
+                        $"Failed to deserialize response to type '{typeof(T).Name}'. Response content: {TrimForLog(rawResponse.Content)}");
+                }
+            }
+
+            return new ApiResponse<T>
+            {
+                StatusCode = rawResponse.StatusCode,
+                Data = data,
+                Content = rawResponse.Content,
+                IsSuccessStatusCode = rawResponse.IsSuccessStatusCode,
+                ErrorMessage = rawResponse.ErrorMessage
+            };
+        }
+
         private async Task LogRequestAsync(HttpRequestMessage request)
         {
             logger.Info("Sending HTTP request...");
             logger.Debug($"Request Method: {request.Method}");
             logger.Debug($"Request URI: {request.RequestUri}");
-            logger.Debug($"Timeout: {(timeout ?? DefaultTimeout).TotalSeconds} seconds");
+
+            if (timeout.HasValue)
+            {
+                logger.Debug($"Timeout: {timeout.Value.TotalSeconds} seconds");
+            }
 
             if (request.Headers.Any())
             {

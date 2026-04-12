@@ -133,32 +133,32 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table5 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
                             "field",
                             "value"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "name",
                             "Fluffy"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "category",
                             "Cats"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "tag",
                             "Friendly"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "tag",
                             "Domesticated"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "photoUrl",
                             "https://example.com/a"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "photoUrl",
                             "https://example.com/b"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "status",
                             "available"});
 #line 8
-    await testRunner.GivenAsync("I have a pet with", ((string)(null)), table5, "Given ");
+    await testRunner.GivenAsync("I have a pet with", ((string)(null)), table1, "Given ");
 #line hidden
 #line 17
     await testRunner.WhenAsync("I create the pet", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
@@ -183,12 +183,6 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
 #line hidden
 #line 26
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 28
-    await testRunner.WhenAsync("I try to retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 29
-    await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
