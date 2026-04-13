@@ -3,7 +3,7 @@ using Configuration.Config;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Api.Tests.Modules
+namespace Api.Services.Modules
 {
     /// <summary>
     /// Registers Pet API-related dependencies.
@@ -18,11 +18,7 @@ namespace Api.Tests.Modules
             services.AddHttpClient<PetService>((sp, client) =>
             {
                 var helper = sp.GetRequiredService<ConfigHelper>();
-
-                var baseUrl = helper.GetRequiredString(
-                    ConfigKeys.ScenariosSection,
-                    ConfigKeys.PetTests,
-                    ConfigKeys.BaseUrl);
+                var baseUrl = helper.GetRequired<string>(ConfigKeys.ScenariosSection, ConfigKeys.PetTests, ConfigKeys.BaseUrl);
 
                 client.BaseAddress = new Uri(baseUrl);
                 client.Timeout = TimeSpan.FromSeconds(90);

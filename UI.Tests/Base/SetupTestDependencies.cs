@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
 using Tests.Tools.Logger;
 
-namespace Api.Tests.Base;
+namespace UI.Tests.Base;
 
 public static class SetupTestDependencies
 {
@@ -20,10 +20,12 @@ public static class SetupTestDependencies
         var loggerType = configHelper.GetRequired<string>(ConfigKeys.GlobalParametersSection, ConfigKeys.LoggerSection, ConfigKeys.LoggerType);
         var logger = LoggerFactory.Create(loggerType);
 
+        // Core services
         services.AddSingleton<IConfiguration>(configuration);
         services.AddSingleton(configHelper);
         services.AddSingleton<ILog>(logger);
 
+        // API
         services.AddPetModule();
 
         return services;

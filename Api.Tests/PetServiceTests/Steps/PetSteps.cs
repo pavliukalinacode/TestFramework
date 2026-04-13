@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Tests.Data.PetService.PayloadBuilder;
 using Tests.Tools.Logger;
 
-
 namespace Api.Tests.PetServiceTests.Steps
 {
     [Binding]
@@ -24,7 +23,6 @@ namespace Api.Tests.PetServiceTests.Steps
         private const string InvalidPet = nameof(InvalidPet);
 
         private const string BigNumber = "111111111111111111111111111111111111111111111111";
-
 
         [Given(@"I have a pet with")]
         public void GivenIHaveAPetWith(Table table)
