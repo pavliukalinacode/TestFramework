@@ -137,6 +137,16 @@ namespace Api.Tests.PetServiceTests.Steps
             scenarioContext.Set((int)response.StatusCode);
         }
 
+        [When(@"I retrieve the pet by id few times")]
+        public async Task WhenIRetrieveThePetByIdFewTimes()
+        {
+            var payload = scenarioContext.Get<PostPetPayload>();
+            var response = await petService.GetPetByIdWithRetry<GetPetResponse>(payload.Id.ToString());
+
+            scenarioContext.Set(response);
+            scenarioContext.Set((int)response.StatusCode);
+        }
+
         [When(@"I try to retrieve the pet by id")]
         public async Task WhenITryToRetrieveThePetById()
         {
@@ -161,6 +171,16 @@ namespace Api.Tests.PetServiceTests.Steps
         {
             var payload = scenarioContext.Get<PostPetPayload>();
             var response = await petService.DeletePetById<ErrorPetResponse>(payload.Id.ToString());
+
+            scenarioContext.Set(response);
+            scenarioContext.Set((int)response.StatusCode);
+        }
+
+        [When(@"I delete the pet by id few times")]
+        public async Task WhenIDeleteThePetByIdFewTimes()
+        {
+            var payload = scenarioContext.Get<PostPetPayload>();
+            var response = await petService.DeletePetByIdWithRetry<ErrorPetResponse>(payload.Id.ToString());
 
             scenarioContext.Set(response);
             scenarioContext.Set((int)response.StatusCode);

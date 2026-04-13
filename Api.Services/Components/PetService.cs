@@ -55,6 +55,14 @@ namespace Api.Services.Components
             return new HttpBuilder(httpClient, logger)
                  .Method(HttpMethod.Get)
                  .ToEndPoint($"/{version}/pet/{petId}")
+                 .ExecuteAsync<T>();
+        }
+
+        public Task<ApiResponse<T>> GetPetByIdWithRetry<T>(string petId)
+        {
+            return new HttpBuilder(httpClient, logger)
+                 .Method(HttpMethod.Get)
+                 .ToEndPoint($"/{version}/pet/{petId}")
                  .ExecuteWithRetryAsync<T>(
                      shouldRetry: response => (int)response.StatusCode == 404,
                      maxAttempts: 10,
@@ -62,6 +70,14 @@ namespace Api.Services.Components
         }
 
         public Task<ApiResponse<T>> DeletePetById<T>(string petId)
+        {
+            return new HttpBuilder(httpClient, logger)
+                .Method(HttpMethod.Delete)
+                .ToEndPoint($"/{version}/pet/{petId}")
+                .ExecuteAsync<T>();
+        }
+
+        public Task<ApiResponse<T>> DeletePetByIdWithRetry<T>(string petId)
         {
             return new HttpBuilder(httpClient, logger)
                 .Method(HttpMethod.Delete)
