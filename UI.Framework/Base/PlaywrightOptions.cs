@@ -2,6 +2,10 @@
 
 namespace UI.Framework.Base
 {
+    /// <summary>
+    /// Configuration object for Playwright browser execution, context creation,
+    /// default timeouts, and tracing behavior.
+    /// </summary>
     public sealed class PlaywrightOptions
     {
         public string BrowserName { get; init; } = "chromium";
@@ -40,6 +44,9 @@ namespace UI.Framework.Base
         }
     }
 
+    /// <summary>
+    /// Configuration object for Playwright tracing output and capture settings.
+    /// </summary>
     public sealed class PlaywrightTracingOptions
     {
         public bool Enabled { get; init; }

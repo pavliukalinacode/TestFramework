@@ -38,10 +38,7 @@ public static class SetupTestDependencies
         });
 
         services.AddSingleton<PlaywrightBrowserHost>();
-        services.AddSingleton<BrowserTypeProvider>();
-        services.AddSingleton<BrowserFactory>();
         services.AddScoped<BrowserSession>();
-        services.AddSingleton<BrowserSessionFactory>();
 
         // API
         services.AddPetModule();

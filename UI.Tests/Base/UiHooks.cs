@@ -5,8 +5,17 @@ using UI.Framework.Base;
 
 namespace UI.Tests.Base
 {
+    /// <summary>
+    /// Handles UI scenario lifecycle by resolving scenario auth requirements,
+    /// creating a browser session, starting tracing, and cleaning up trace
+    /// artifacts and browser resources after execution.
+    /// </summary>
     [Binding]
-    public sealed class UiHooks(BrowserSession browserSession, ISauceDemoAuthProvider authBootstrapper, SauceDemoOptions sauceDemoOptions, ScenarioContext scenarioContext)
+    public sealed class UiHooks(
+        BrowserSession browserSession,
+        ISauceDemoAuthProvider authBootstrapper,
+        SauceDemoOptions sauceDemoOptions,
+        ScenarioContext scenarioContext)
     {
         [BeforeScenario("@ui")]
         public async Task BeforeUiScenarioAsync()
@@ -26,7 +35,6 @@ namespace UI.Tests.Base
             }
 
             await browserSession.CreateContextAsync(authProfile);
-
             await browserSession.StartTracingAsync();
         }
 
@@ -35,8 +43,14 @@ namespace UI.Tests.Base
         {
             var safeScenarioName = SanitizeFileName(scenarioContext.ScenarioInfo.Title);
 
-            await browserSession.StopTracingAsync(safeScenarioName);
-            await browserSession.DisposeAsync();
+            try
+            {
+                await browserSession.StopTracingAsync(safeScenarioName);
+            }
+            finally
+            {
+                await browserSession.DisposeAsync();
+            }
         }
 
         private SauceDemoUserType? ResolveUserType()
