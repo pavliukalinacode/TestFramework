@@ -1,11 +1,9 @@
 ﻿using Configuration.Config;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using UI.Apps.SauceDemo.Auth;
 using UI.Apps.SauceDemo.Flows;
 using UI.Apps.SauceDemo.Pages;
-using UI.Framework.Auth;
 
 namespace UI.Apps.SauceDemo.Module
 {

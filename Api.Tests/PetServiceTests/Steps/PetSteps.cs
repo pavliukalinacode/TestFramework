@@ -8,7 +8,6 @@ using Reqnroll;
 using System.Numerics;
 using System.Threading.Tasks;
 using Tests.Data.PetService.PayloadBuilder;
-using Tests.Tools.Logger;
 
 namespace Api.Tests.PetServiceTests.Steps
 {

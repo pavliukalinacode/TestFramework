@@ -8,25 +8,22 @@ using UI.Apps.SauceDemo.Pages;
 using UI.Framework.Auth;
 using UI.Framework.Base;
 
-namespace UI.Apps.SauceDemo.Auth 
+namespace UI.Apps.SauceDemo.Auth
 {
-
-/// <summary>
-/// Ensures saved authentication state exists for SauceDemo users that support
-/// persistent auth profiles by performing a login flow and saving the resulting
-/// browser storage state.
-/// </summary>
-public sealed class SauceDemoAuthProvider(
-    IAuthStateProvider authStateProvider,
-    SauceDemoOptions sauceDemoOptions,
-    PlaywrightBrowserHost browserHost,
-    PlaywrightOptions playwrightOptions,
-    ILog logger) : ISauceDemoAuthProvider
+    /// <summary>
+    /// Ensures saved authentication state exists for SauceDemo users that support
+    /// persistent auth profiles by performing a login flow and saving the resulting
+    /// browser storage state.
+    /// </summary>
+    public sealed class SauceDemoAuthProvider(IAuthStateProvider authStateProvider, SauceDemoOptions sauceDemoOptions, PlaywrightBrowserHost browserHost, PlaywrightOptions playwrightOptions, ILog logger) : ISauceDemoAuthProvider, IDisposable
     {
         private readonly SemaphoreSlim syncLock = new(1, 1);
+        private bool isDisposed;
 
         public async Task EnsureAuthStateAsync(SauceDemoUserType userType)
         {
+            ThrowIfDisposed();
+
             var user = sauceDemoOptions.GetUser(userType);
 
             if (!user.SupportsSavedAuthState)
@@ -53,11 +50,7 @@ public sealed class SauceDemoAuthProvider(
 
                 var storageStatePath = BuildStorageStatePath(user.ProfileName);
 
-                await using var session = new BrowserSession(
-                    browserHost,
-                    authStateProvider,
-                    playwrightOptions,
-                    logger);
+                await using var session = new BrowserSession(browserHost, authStateProvider, playwrightOptions,logger);
 
                 await session.CreateContextAsync();
 
@@ -73,6 +66,21 @@ public sealed class SauceDemoAuthProvider(
             {
                 syncLock.Release();
             }
+        }
+
+        public void Dispose()
+        {
+            if (isDisposed)
+                return;
+
+            syncLock.Dispose();
+            isDisposed = true;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (isDisposed)
+                throw new ObjectDisposedException(nameof(SauceDemoAuthProvider));
         }
 
         private static bool AuthStateExists(string? path) =>

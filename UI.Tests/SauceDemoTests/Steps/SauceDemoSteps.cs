@@ -1,8 +1,5 @@
 ﻿using NUnit.Framework;
 using Reqnroll;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UI.Apps.SauceDemo.Auth;
 using UI.Apps.SauceDemo.Flows;
 using UI.Apps.SauceDemo.Pages;

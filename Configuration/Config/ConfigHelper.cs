@@ -40,7 +40,6 @@ namespace Configuration.Config
                 $"Configuration section '{key}' could not be bound to '{typeof(T).Name}'.");
         }
 
-
         private static string BuildKey(params string[] parts)
         {
             return string.Join(":", parts);

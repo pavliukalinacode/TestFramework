@@ -8,35 +8,15 @@ namespace UI.Framework.Base
     /// Owns the scenario-scoped browser context and page, and manages tracing
     /// for a single UI scenario.
     /// </summary>
-    public sealed class BrowserSession : IDisposable, IAsyncDisposable
+    public sealed class BrowserSession(PlaywrightBrowserHost browserHost, IAuthStateProvider authStateProvider, PlaywrightOptions options, ILog logger) : IDisposable, IAsyncDisposable
     {
-        private readonly PlaywrightBrowserHost browserHost;
-        private readonly IAuthStateProvider authStateProvider;
-        private readonly PlaywrightOptions options;
-        private readonly ILog logger;
-
         private IBrowserContext? context;
         private IPage? page;
         private bool traceStarted;
         private bool isDisposed;
 
-        public BrowserSession(
-            PlaywrightBrowserHost browserHost,
-            IAuthStateProvider authStateProvider,
-            PlaywrightOptions options,
-            ILog logger)
-        {
-            this.browserHost = browserHost ?? throw new ArgumentNullException(nameof(browserHost));
-            this.authStateProvider = authStateProvider ?? throw new ArgumentNullException(nameof(authStateProvider));
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        public IBrowserContext Context =>
-            context ?? throw new InvalidOperationException("Browser session not initialized.");
-
-        public IPage Page =>
-            page ?? throw new InvalidOperationException("Browser session not initialized.");
+        public IBrowserContext Context => context ?? throw new InvalidOperationException("Browser session not initialized.");
+        public IPage Page => page ?? throw new InvalidOperationException("Browser session not initialized.");
 
         public bool IsInitialized => context is not null && page is not null;
 

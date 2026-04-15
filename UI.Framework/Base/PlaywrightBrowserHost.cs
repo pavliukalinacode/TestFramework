@@ -3,25 +3,17 @@ using Tests.Tools.Logger;
 
 namespace UI.Framework.Base
 {
+    /// <summary>
     /// Owns the Playwright runtime and shared browser instance for the test run.
     /// The browser is started lazily and reused across scenarios.
     /// </summary>
-    public sealed class PlaywrightBrowserHost : IAsyncDisposable
+    public sealed class PlaywrightBrowserHost(PlaywrightOptions options, ILog logger) : IDisposable, IAsyncDisposable
     {
-        private readonly PlaywrightOptions options;
-        private readonly ILog logger;
         private readonly SemaphoreSlim syncLock = new(1, 1);
-
         private IPlaywright? playwright;
         private IBrowser? browser;
         private bool isStarted;
         private bool isDisposed;
-
-        public PlaywrightBrowserHost(PlaywrightOptions options, ILog logger)
-        {
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
 
         public async Task StartAsync()
         {
@@ -43,8 +35,6 @@ namespace UI.Framework.Base
                 browser = options.NormalizedBrowserName switch
                 {
                     "chromium" => await playwright.Chromium.LaunchAsync(options.CreateLaunchOptions()),
-                    "firefox" => await playwright.Firefox.LaunchAsync(options.CreateLaunchOptions()),
-                    "webkit" => await playwright.Webkit.LaunchAsync(options.CreateLaunchOptions()),
                     _ => throw new NotSupportedException($"Unsupported browser '{options.BrowserName}'.")
                 };
 
@@ -63,6 +53,14 @@ namespace UI.Framework.Base
 
             await StartAsync();
             return browser ?? throw new InvalidOperationException("Browser was not initialized.");
+        }
+
+        public void Dispose()
+        {
+            if (isDisposed)
+                return;
+
+            DisposeAsync().AsTask().GetAwaiter().GetResult();
         }
 
         public async ValueTask DisposeAsync()

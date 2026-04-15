@@ -1,5 +1,4 @@
 ﻿using Microsoft.Playwright;
-using System;
 using System.Threading.Tasks;
 using UI.Framework.Base;
 

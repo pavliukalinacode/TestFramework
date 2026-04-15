@@ -1,23 +1,16 @@
-﻿using Microsoft.Playwright;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using UI.Apps.SauceDemo.Auth;
 using UI.Apps.SauceDemo.Pages;
 
 namespace UI.Apps.SauceDemo.Flows
 {
-    public sealed class SauceDemoLoginFlow
+    public sealed class SauceDemoLoginFlow(
+        SauceDemoOptions options,
+        LoginPage loginPage)
     {
-        private readonly SauceDemoOptions options;
-        private readonly LoginPage loginPage;
-
-        public SauceDemoLoginFlow(
-            SauceDemoOptions options,
-            LoginPage loginPage)
-        {
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.loginPage = loginPage ?? throw new ArgumentNullException(nameof(loginPage));
-        }
+        private readonly SauceDemoOptions options = options ?? throw new ArgumentNullException(nameof(options));
+        private readonly LoginPage loginPage = loginPage ?? throw new ArgumentNullException(nameof(loginPage));
 
         public async Task LoginAsync(SauceDemoUserType userType)
         {
