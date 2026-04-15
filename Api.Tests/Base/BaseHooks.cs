@@ -6,17 +6,8 @@ using Tests.Tools.Logger;
 namespace Api.Tests.Base
 {
     [Binding]
-    public sealed class Hooks
+    public sealed class Hooks(ILog logger, ScenarioContext scenarioContext)
     {
-        private readonly ILog logger;
-        private readonly ScenarioContext scenarioContext;
-
-        public Hooks(ILog logger, ScenarioContext scenarioContext)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.scenarioContext = scenarioContext ?? throw new ArgumentNullException(nameof(scenarioContext));
-        }
-
         [BeforeScenario("@quarantined", Order = 10)]
         public void SkipQuarantinedScenario()
         {

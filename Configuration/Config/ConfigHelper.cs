@@ -24,6 +24,23 @@ namespace Configuration.Config
             return value;
         }
 
+        public T GetRequiredSection<T>(params string[] pathParts)
+        {
+            var key = BuildKey(pathParts);
+            var section = config.GetSection(key);
+
+            if (!section.Exists())
+            {
+                throw new InvalidOperationException($"Missing configuration section '{key}'.");
+            }
+
+            var value = section.Get<T>();
+
+            return value ?? throw new InvalidOperationException(
+                $"Configuration section '{key}' could not be bound to '{typeof(T).Name}'.");
+        }
+
+
         private static string BuildKey(params string[] parts)
         {
             return string.Join(":", parts);

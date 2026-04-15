@@ -5,7 +5,6 @@ using Models.PetService.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Reqnroll;
-using System;
 using System.Numerics;
 using System.Threading.Tasks;
 using Tests.Data.PetService.PayloadBuilder;
@@ -14,12 +13,8 @@ using Tests.Tools.Logger;
 namespace Api.Tests.PetServiceTests.Steps
 {
     [Binding]
-    public sealed class PetSteps(ScenarioContext scenarioContext, PetService petService, ILog logger)
+    public sealed class PetSteps(ScenarioContext scenarioContext, PetService petService)
     {
-        private readonly ScenarioContext scenarioContext = scenarioContext ?? throw new ArgumentNullException(nameof(scenarioContext));
-        private readonly PetService petService = petService ?? throw new ArgumentNullException(nameof(petService));
-        private readonly ILog logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
         private const string InvalidPet = nameof(InvalidPet);
 
         private const string BigNumber = "111111111111111111111111111111111111111111111111";
