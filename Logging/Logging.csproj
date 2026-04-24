@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<PackageId>pavliukalinacode.Logging</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>pavliukalinacode</Authors>
+		<Company>pavliukalinacode</Company>
+		<Description>Lightweight logging utilities for test automation frameworks.</Description>
+
+		<RepositoryUrl>https://github.com/pavliukalinacode/TestFramework</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+</Project>
