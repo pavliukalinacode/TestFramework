@@ -1,0 +1,41 @@
+name: Publish Logging NuGet
+
+on:
+  push:
+    tags:
+      - "logging-v*"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Add GitHub NuGet source
+        run: |
+          dotnet nuget add source \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }} \
+            --store-password-in-clear-text \
+            --name github \
+            "https://nuget.pkg.github.com/pavliukalinacode/index.json"
+
+      - name: Pack
+        run: dotnet pack Logging/Logging.csproj -c Release
+
+      - name: Push
+        run: |
+          dotnet nuget push Logging/bin/Release/*.nupkg \
+            --source github \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
