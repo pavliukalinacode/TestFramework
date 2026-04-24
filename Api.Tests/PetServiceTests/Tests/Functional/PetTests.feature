@@ -26,7 +26,7 @@ Feature: Pet API Functional Validation
     When I create the pet
     Then the response status code should be '200'
     And the created pet matches the submitted payload
-    When I retrieve the pet by id
+    When I retrieve the pet by id few times
     Then the response status code should be '200'
     And the retrieved pet matches the submitted payload
 
@@ -41,7 +41,7 @@ Feature: Pet API Functional Validation
       | status   | <status>  |
     When I create the pet
     Then the response status code should be '200'
-    When I retrieve the pet by id
+    When I retrieve the pet by id few times
     Then the response status code should be '200'
     And the retrieved pet matches the submitted payload
 

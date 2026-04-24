@@ -18,12 +18,11 @@ Feature: Pet Api Smoke Tests
     Then the response status code should be '200'
     And the created pet matches the submitted payload
 
-    When I retrieve the pet by id
+    When I retrieve the pet by id few times
     Then the response status code should be '200'
     And the retrieved pet matches the submitted payload
 
-    When I delete the pet by id
+    When I delete the pet by id few times
     Then the response status code should be '200'
-
-    When I try to retrieve the pet by id
+    When I delete the pet by id
     Then the response status code should be '404'

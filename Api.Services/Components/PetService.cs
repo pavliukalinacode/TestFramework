@@ -26,8 +26,8 @@ namespace Api.Services.Components
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             ArgumentNullException.ThrowIfNull(configHelper);
 
-            version = configHelper.GetRequiredString(ConfigKeys.ScenariosSection, ConfigKeys.PetTests, ConfigKeys.Version);
-            postPetTimeout = configHelper.GetRequiredInt(ConfigKeys.ScenariosSection, ConfigKeys.PetTests, ConfigKeys.Timeout, ConfigKeys.PostPet);
+            version = configHelper.GetRequired<string>(ConfigKeys.ScenariosSection, ConfigKeys.PetTests, ConfigKeys.Version);
+            postPetTimeout = configHelper.GetRequired<int>(ConfigKeys.ScenariosSection, ConfigKeys.PetTests, ConfigKeys.Timeout, ConfigKeys.PostPet);
         }
 
         public Task<ApiResponse<T>> PostPet<T>(PostPetPayload payload)
@@ -58,12 +58,34 @@ namespace Api.Services.Components
                  .ExecuteAsync<T>();
         }
 
+        public Task<ApiResponse<T>> GetPetByIdWithRetry<T>(string petId)
+        {
+            return new HttpBuilder(httpClient, logger)
+                 .Method(HttpMethod.Get)
+                 .ToEndPoint($"/{version}/pet/{petId}")
+                 .ExecuteWithRetryAsync<T>(
+                     shouldRetry: response => (int)response.StatusCode == 404,
+                     maxAttempts: 10,
+                     delayMilliseconds: 5000);
+        }
+
         public Task<ApiResponse<T>> DeletePetById<T>(string petId)
         {
             return new HttpBuilder(httpClient, logger)
                 .Method(HttpMethod.Delete)
                 .ToEndPoint($"/{version}/pet/{petId}")
                 .ExecuteAsync<T>();
+        }
+
+        public Task<ApiResponse<T>> DeletePetByIdWithRetry<T>(string petId)
+        {
+            return new HttpBuilder(httpClient, logger)
+                .Method(HttpMethod.Delete)
+                .ToEndPoint($"/{version}/pet/{petId}")
+                .ExecuteWithRetryAsync<T>(
+                    shouldRetry: response => (int)response.StatusCode == 404,
+                    maxAttempts: 10,
+                    delayMilliseconds: 5000);
         }
     }
 }

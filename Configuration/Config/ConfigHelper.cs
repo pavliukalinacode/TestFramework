@@ -11,23 +11,33 @@ namespace Configuration.Config
     {
         private readonly IConfiguration config = config ?? throw new ArgumentNullException(nameof(config));
 
-        public string GetRequiredString(params string[] pathParts)
+        public T GetRequired<T>(params string[] pathParts)
         {
             var key = BuildKey(pathParts);
-            var value = config[key];
+            var value = config.GetValue<T?>(key);
 
-            return !string.IsNullOrWhiteSpace(value)
-                ? value
-                : throw new InvalidOperationException($"Missing configuration value for '{key}'.");
+            if (value is null)
+            {
+                throw new InvalidOperationException($"Missing configuration value for '{key}'.");
+            }
+
+            return value;
         }
 
-        public int GetRequiredInt(params string[] pathParts)
+        public T GetRequiredSection<T>(params string[] pathParts)
         {
             var key = BuildKey(pathParts);
-            var value = config.GetValue<int?>(key);
+            var section = config.GetSection(key);
 
-            return value
-                ?? throw new InvalidOperationException($"Missing configuration value for '{key}'.");
+            if (!section.Exists())
+            {
+                throw new InvalidOperationException($"Missing configuration section '{key}'.");
+            }
+
+            var value = section.Get<T>();
+
+            return value ?? throw new InvalidOperationException(
+                $"Configuration section '{key}' could not be bound to '{typeof(T).Name}'.");
         }
 
         private static string BuildKey(params string[] parts)

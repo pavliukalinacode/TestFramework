@@ -170,7 +170,7 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
     await testRunner.AndAsync("the created pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 21
-    await testRunner.WhenAsync("I retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.WhenAsync("I retrieve the pet by id few times", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 22
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
@@ -179,15 +179,15 @@ namespace Api.Tests.PetServiceTests.Tests.Smoke
     await testRunner.AndAsync("the retrieved pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 25
-    await testRunner.WhenAsync("I delete the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.WhenAsync("I delete the pet by id few times", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 26
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 28
-    await testRunner.WhenAsync("I try to retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line 27
+    await testRunner.WhenAsync("I delete the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 29
+#line 28
     await testRunner.ThenAsync("the response status code should be \'404\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

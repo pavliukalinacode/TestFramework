@@ -187,7 +187,7 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
     await testRunner.AndAsync("the created pet matches the submitted payload", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 29
-    await testRunner.WhenAsync("I retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.WhenAsync("I retrieve the pet by id few times", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 30
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
@@ -255,7 +255,7 @@ namespace Api.Tests.PetServiceTests.Tests.Functional
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 44
-    await testRunner.WhenAsync("I retrieve the pet by id", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+    await testRunner.WhenAsync("I retrieve the pet by id few times", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 45
     await testRunner.ThenAsync("the response status code should be \'200\'", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");

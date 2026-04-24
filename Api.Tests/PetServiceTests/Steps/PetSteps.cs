@@ -12,19 +12,11 @@ using Tests.Data.PetService.PayloadBuilder;
 namespace Api.Tests.PetServiceTests.Steps
 {
     [Binding]
-    public sealed class PetSteps
+    public sealed class PetSteps(ScenarioContext scenarioContext, PetService petService)
     {
-        private readonly ScenarioContext scenarioContext;
-        private readonly PetService petService;
-
-        private const string BigNumber = "111111111111111111111111111111111111111111111111";
         private const string InvalidPet = nameof(InvalidPet);
 
-        public PetSteps(ScenarioContext scenarioContext, PetService petService)
-        {
-            this.scenarioContext = scenarioContext;
-            this.petService = petService;
-        }
+        private const string BigNumber = "111111111111111111111111111111111111111111111111";
 
         [Given(@"I have a pet with")]
         public void GivenIHaveAPetWith(Table table)
@@ -35,8 +27,8 @@ namespace Api.Tests.PetServiceTests.Steps
             {
                 builder.Apply(row["field"], row["value"]);
             }
-
-            scenarioContext.Set(builder.Build());
+            var p = builder.Build();
+            scenarioContext.Set(p);
         }
 
         [Given("I have a pet with no name")]
@@ -137,6 +129,16 @@ namespace Api.Tests.PetServiceTests.Steps
             scenarioContext.Set((int)response.StatusCode);
         }
 
+        [When(@"I retrieve the pet by id few times")]
+        public async Task WhenIRetrieveThePetByIdFewTimes()
+        {
+            var payload = scenarioContext.Get<PostPetPayload>();
+            var response = await petService.GetPetByIdWithRetry<GetPetResponse>(payload.Id.ToString());
+
+            scenarioContext.Set(response);
+            scenarioContext.Set((int)response.StatusCode);
+        }
+
         [When(@"I try to retrieve the pet by id")]
         public async Task WhenITryToRetrieveThePetById()
         {
@@ -161,6 +163,16 @@ namespace Api.Tests.PetServiceTests.Steps
         {
             var payload = scenarioContext.Get<PostPetPayload>();
             var response = await petService.DeletePetById<ErrorPetResponse>(payload.Id.ToString());
+
+            scenarioContext.Set(response);
+            scenarioContext.Set((int)response.StatusCode);
+        }
+
+        [When(@"I delete the pet by id few times")]
+        public async Task WhenIDeleteThePetByIdFewTimes()
+        {
+            var payload = scenarioContext.Get<PostPetPayload>();
+            var response = await petService.DeletePetByIdWithRetry<ErrorPetResponse>(payload.Id.ToString());
 
             scenarioContext.Set(response);
             scenarioContext.Set((int)response.StatusCode);
