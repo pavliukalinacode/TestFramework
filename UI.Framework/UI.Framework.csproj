@@ -13,6 +13,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Configuration\Configuration.csproj" />
 		<ProjectReference Include="..\Tests.Tools\Tests.Tools.csproj" />
+		<PackageReference Include="pavliukalinacode.Logging" Version="1.0.0" />
 	</ItemGroup>
 
 </Project>

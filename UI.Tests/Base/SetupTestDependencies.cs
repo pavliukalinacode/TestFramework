@@ -3,7 +3,7 @@ using Configuration.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
-using Tests.Tools.Logger;
+using Logging.Logger;
 using UI.Apps.SauceDemo.Module;
 using UI.Framework.Auth;
 using UI.Framework.Base;

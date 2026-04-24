@@ -1,7 +1,7 @@
 ﻿using Reqnroll;
 using System;
 using System.Linq;
-using Tests.Tools.Logger;
+using Logging.Logger;
 
 namespace Api.Tests.Base
 {

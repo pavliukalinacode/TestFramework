@@ -9,7 +9,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Tests.Tools.Logger;
+using Logging.Logger;
 
 namespace Api.Services.Tools
 {

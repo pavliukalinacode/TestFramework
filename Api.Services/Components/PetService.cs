@@ -5,7 +5,7 @@ using Models.PetService.Payload;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Tests.Tools.Logger;
+using Logging.Logger;
 
 namespace Api.Services.Components
 {

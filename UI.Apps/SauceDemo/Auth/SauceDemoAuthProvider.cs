@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Tests.Tools.Logger;
+using Logging.Logger;
 using UI.Apps.SauceDemo.Flows;
 using UI.Apps.SauceDemo.Pages;
 using UI.Framework.Auth;

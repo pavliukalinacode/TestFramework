@@ -3,7 +3,7 @@ using Configuration.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
-using Tests.Tools.Logger;
+using Logging.Logger;
 
 namespace Api.Tests.Base;
 

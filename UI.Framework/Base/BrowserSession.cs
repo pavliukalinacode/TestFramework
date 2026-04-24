@@ -1,5 +1,5 @@
 ﻿using Microsoft.Playwright;
-using Tests.Tools.Logger;
+using Logging.Logger;
 using UI.Framework.Auth;
 
 namespace UI.Framework.Base
