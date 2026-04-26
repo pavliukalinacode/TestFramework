@@ -1,12 +1,17 @@
-﻿using Reqnroll;
+﻿using Logging.Logger;
+using NUnit.Framework;
+using Reqnroll;
 using System;
 using System.Linq;
-using Logging.Logger;
+using Tests.Tools.Webhook;
 
 namespace Api.Tests.Base
 {
     [Binding]
-    public sealed class Hooks(ILog logger, ScenarioContext scenarioContext)
+    public sealed class Hooks(
+        ILog logger,
+        ScenarioContext scenarioContext,
+        TestWebhookServer? testWebhookServer = null)
     {
         [BeforeScenario("@quarantined", Order = 10)]
         public void SkipQuarantinedScenario()
@@ -22,6 +27,13 @@ namespace Api.Tests.Base
             logger.Info($"Skipping quarantined scenario. Additional tags: [{tagInfo}]");
 
             Assert.Ignore($"Scenario is quarantined and skipped by design. Additional tags: [{tagInfo}]");
+        }
+
+        [AfterScenario(Order = 100)]
+        public void DisposeTestWebhookServer()
+        {
+            testWebhookServer?.Dispose();
+            logger.Info("Test webhook server disposed.");
         }
     }
 }

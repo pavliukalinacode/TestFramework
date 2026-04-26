@@ -1,9 +1,10 @@
 ﻿using Api.Services.Modules;
 using Configuration.Config;
+using Logging.Logger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
-using Logging.Logger;
+using Tests.Tools.Webhook;
 
 namespace Api.Tests.Base;
 
@@ -24,6 +25,7 @@ public static class SetupTestDependencies
         services.AddSingleton(configHelper);
         services.AddSingleton<ILog>(logger);
 
+        services.AddScoped<TestWebhookServer>();
         services.AddPetModule();
 
         return services;

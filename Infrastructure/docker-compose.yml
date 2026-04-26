@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: notification-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+      - ./sql:/sql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong!Passw0rd' -C -Q 'SELECT 1' || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourStrong!Passw0rd' -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  sql-init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: notification-sql-init
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    volumes:
+      - ./sql:/sql
+    command: >
+      /bin/bash -c "
+      /opt/mssql-tools/bin/sqlcmd
+      -S sql-server
+      -U sa
+      -P 'YourStrong!Passw0rd'
+      -i /sql/init.sql
+      "
+    restart: "no"
+
+  subscription-service:
+    build:
+      context: ../
+      dockerfile: Application.Subscription.Service/Dockerfile
+    container_name: subscription-service
+    ports:
+      - "8082:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__DefaultConnection: "Server=sql-server,1433;Database=NotificationDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+    depends_on:
+      sql-init:
+        condition: service_completed_successfully
+
+  event-service:
+    build:
+      context: ../
+      dockerfile: Application.Event.Service/Dockerfile
+    container_name: event-service
+    ports:
+      - "8081:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+      ASPNETCORE_URLS: "http://+:8080"
+      SubscriptionService__BaseUrl: "http://subscription-service:8080"
+    depends_on:
+      - subscription-service
+
+volumes:
+  sql_data:
