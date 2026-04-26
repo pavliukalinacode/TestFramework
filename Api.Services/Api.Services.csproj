@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Application.Contracts\Application.Contracts.csproj" />
 		<ProjectReference Include="..\Configuration\Configuration.csproj" />
 		<ProjectReference Include="..\Models\Models.csproj" />
 		<ProjectReference Include="..\Tests.Tools\Tests.Tools.csproj" />

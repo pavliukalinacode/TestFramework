@@ -1,4 +1,5 @@
-﻿using Application.Contracts;
+﻿using Application.Contracts.EventContracts;
+using Application.Contracts.SubscriptionContracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
@@ -6,20 +7,20 @@ using System.Text.Json;
 namespace Application.Event.Service.Controllers
 {
     [ApiController]
-    [Route("events")]
-    public class EventController(HttpClient httpClient, IConfiguration config) : ControllerBase
+    [Route("v1/events")]
+    public class EventController(HttpClient httpClient) : ControllerBase
     {
         private readonly HttpClient _httpClient = httpClient;
-        private readonly IConfiguration _config = config;
+
+        // TODO: Move base URL to config or service discovery (K8s DNS)
+        private const string SubscriptionServiceBaseUrl = "http://subscription-service:8080";
 
         [HttpPost]
         public async Task<IActionResult> Publish(EventDto evt)
         {
-            var baseUrl = _config["SubscriptionService__BaseUrl"];
-
             // 1. Get subscribers
             var response = await _httpClient.GetAsync(
-                $"{baseUrl}/subscriptions/{evt.EventType}"
+                $"{SubscriptionServiceBaseUrl}/v1/subscriptions/{evt.EventType}"
             );
 
             if (!response.IsSuccessStatusCode)
@@ -29,11 +30,13 @@ namespace Application.Event.Service.Controllers
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var subscribers = JsonSerializer.Deserialize<List<SubscriptionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var subscribers = JsonSerializer.Deserialize<List<SubscriptionDto>>(
+                json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            var results = new List<EventDeliveryResultDto>();
 
             // 2. Send event to each webhook
-            var results = new List<object>();
-
             foreach (var sub in subscribers ?? [])
             {
                 try
@@ -49,23 +52,23 @@ namespace Application.Event.Service.Controllers
                         content
                     );
 
-                    results.Add(new
+                    results.Add(new EventDeliveryResultDto
                     {
-                        sub.WebhookUrl,
+                        WebhookUrl = sub.WebhookUrl,
                         Status = webhookResponse.StatusCode
                     });
                 }
                 catch (Exception ex)
                 {
-                    results.Add(new
+                    results.Add(new EventDeliveryResultDto
                     {
-                        sub.WebhookUrl,
+                        WebhookUrl = sub.WebhookUrl,
                         Error = ex.Message
                     });
                 }
             }
 
-            return Ok(new
+            return Ok(new PublishEventResponseDto
             {
                 Message = "Event processed",
                 SubscribersCount = subscribers?.Count ?? 0,

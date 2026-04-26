@@ -22,6 +22,7 @@
 		<PackageReference Include="NUnit" Version="4.2.2" />
 		<PackageReference Include="NUnit.Analyzers" Version="4.4.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+		<PackageReference Include="PactNet" Version="5.0.1" />
 		<PackageReference Include="pavliukalinacode.Logging" Version="1.0.0" />
 		<PackageReference Include="Reqnroll" Version="3.3.4" />
 		<PackageReference Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="3.3.4" />
@@ -37,6 +38,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Api.Services\Api.Services.csproj" />
+		<ProjectReference Include="..\Application.Contracts\Application.Contracts.csproj" />
 		<ProjectReference Include="..\Configuration\Configuration.csproj" />
 		<ProjectReference Include="..\Tests.Data\Tests.Data.csproj" />
 	</ItemGroup>
