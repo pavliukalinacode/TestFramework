@@ -1,5 +1,5 @@
 ﻿using Application.Contracts.EventContracts;
-using Application.Contracts.SubscriptionContracts;
+using Application.Event.Service.Clients;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
@@ -8,49 +8,56 @@ namespace Application.Event.Service.Controllers
 {
     [ApiController]
     [Route("v1/events")]
-    public class EventController(HttpClient httpClient) : ControllerBase
+    public class EventController(
+        ISubscriptionClient subscriptionClient,
+        HttpClient httpClient) : ControllerBase
     {
-        private readonly HttpClient _httpClient = httpClient;
-
-        // TODO: Move base URL to config or service discovery (K8s DNS)
-        private const string SubscriptionServiceBaseUrl = "http://subscription-service:8080";
+        private readonly ISubscriptionClient subscriptionClient = subscriptionClient;
+        private readonly HttpClient httpClient = httpClient;
 
         [HttpPost]
-        public async Task<IActionResult> Publish(EventDto evt)
+        public async Task<IActionResult> Publish(
+            EventDto evt,
+            CancellationToken cancellationToken)
         {
-            // 1. Get subscribers
-            var response = await _httpClient.GetAsync(
-                $"{SubscriptionServiceBaseUrl}/v1/subscriptions/{evt.EventType}"
-            );
+            if (evt == null)
+            {
+                return BadRequest("Event payload is required");
+            }
 
-            if (!response.IsSuccessStatusCode)
+            if (string.IsNullOrWhiteSpace(evt.EventType))
+            {
+                return BadRequest("EventType is required");
+            }
+
+            IReadOnlyList<Application.Contracts.SubscriptionContracts.SubscriptionDto> subscribers;
+
+            try
+            {
+                subscribers = await subscriptionClient.GetSubscriptionsAsync(
+                    evt.EventType,
+                    cancellationToken);
+            }
+            catch (Exception)
             {
                 return StatusCode(500, "Failed to fetch subscriptions");
             }
 
-            var json = await response.Content.ReadAsStringAsync();
-
-            var subscribers = JsonSerializer.Deserialize<List<SubscriptionDto>>(
-                json,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
             var results = new List<EventDeliveryResultDto>();
 
-            // 2. Send event to each webhook
-            foreach (var sub in subscribers ?? [])
+            foreach (var sub in subscribers)
             {
                 try
                 {
                     var content = new StringContent(
                         JsonSerializer.Serialize(evt),
                         Encoding.UTF8,
-                        "application/json"
-                    );
+                        "application/json");
 
-                    var webhookResponse = await _httpClient.PostAsync(
+                    var webhookResponse = await httpClient.PostAsync(
                         sub.WebhookUrl,
-                        content
-                    );
+                        content,
+                        cancellationToken);
 
                     results.Add(new EventDeliveryResultDto
                     {
@@ -71,7 +78,7 @@ namespace Application.Event.Service.Controllers
             return Ok(new PublishEventResponseDto
             {
                 Message = "Event processed",
-                SubscribersCount = subscribers?.Count ?? 0,
+                SubscribersCount = subscribers.Count,
                 DeliveryResults = results
             });
         }

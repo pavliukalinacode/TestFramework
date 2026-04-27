@@ -1,3 +1,4 @@
+using Application.Event.Service.Clients;
 
 namespace Application.Event.Service
 {
@@ -8,7 +9,10 @@ namespace Application.Event.Service
             var builder = WebApplication.CreateBuilder(args);
 
             // HTTP client for calling Subscription Service
-            builder.Services.AddHttpClient();
+            builder.Services.AddHttpClient<ISubscriptionClient, SubscriptionClient>(client =>
+            {
+                client.BaseAddress = new Uri("http://subscription-service:8080");
+            });
 
             // Controllers
             builder.Services.AddControllers();
