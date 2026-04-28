@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.EventContracts;
+using Application.Contracts.SubscriptionContracts;
 using Application.Event.Service.Clients;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -6,14 +7,13 @@ using System.Text.Json;
 
 namespace Application.Event.Service.Controllers
 {
+
     [ApiController]
     [Route("v1/events")]
-    public class EventController(
-        ISubscriptionClient subscriptionClient,
-        HttpClient httpClient) : ControllerBase
+    public class EventController(ISubscriptionClient subscriptionClient, IWebhookClient webhookClient) : ControllerBase
     {
         private readonly ISubscriptionClient subscriptionClient = subscriptionClient;
-        private readonly HttpClient httpClient = httpClient;
+        private readonly IWebhookClient webhookClient = webhookClient;
 
         [HttpPost]
         public async Task<IActionResult> Publish(
@@ -21,16 +21,12 @@ namespace Application.Event.Service.Controllers
             CancellationToken cancellationToken)
         {
             if (evt == null)
-            {
                 return BadRequest("Event payload is required");
-            }
 
             if (string.IsNullOrWhiteSpace(evt.EventType))
-            {
                 return BadRequest("EventType is required");
-            }
 
-            IReadOnlyList<Application.Contracts.SubscriptionContracts.SubscriptionDto> subscribers;
+            IReadOnlyList<SubscriptionDto> subscribers;
 
             try
             {
@@ -38,7 +34,7 @@ namespace Application.Event.Service.Controllers
                     evt.EventType,
                     cancellationToken);
             }
-            catch (Exception)
+            catch
             {
                 return StatusCode(500, "Failed to fetch subscriptions");
             }
@@ -49,14 +45,9 @@ namespace Application.Event.Service.Controllers
             {
                 try
                 {
-                    var content = new StringContent(
-                        JsonSerializer.Serialize(evt),
-                        Encoding.UTF8,
-                        "application/json");
-
-                    var webhookResponse = await httpClient.PostAsync(
+                    var webhookResponse = await webhookClient.SendAsync(
                         sub.WebhookUrl,
-                        content,
+                        evt,
                         cancellationToken);
 
                     results.Add(new EventDeliveryResultDto
